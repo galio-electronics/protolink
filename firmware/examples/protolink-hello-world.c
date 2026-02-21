@@ -5,7 +5,7 @@
  * Created on 20 de noviembre de 2025, 01:57 PM
  */
 #define PROTOLINK_DEFAULT true //comment this line for unable default functions
-#include "../protolink/v2.h"
+#include "../../v2.h"  //<-- from repo https://github.com/galio-electronics/protolink
 #include <bootloader.h>
 #include <stdio.h>
 #include <stdlib.h>

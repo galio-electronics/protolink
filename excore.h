@@ -13,6 +13,7 @@
 #include <18F67K40.h>          // Ajusta tu MCU
 #device ADC = 10
 #fuses HS
+#fuses NOPPS1WAY
 #use delay(crystal=16mhz,clock=64mhz)
 
 /*USER BUTTON AND LEDS*/

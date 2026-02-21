@@ -7,7 +7,7 @@
  */
 
 
-#include "../protolink/excore.h"
+#include "../../excore.h"
 #define LED2 PIN_D1 //se agrega como compatibilidad al loader
 #define COMPILATION_DATE    __DATE__
 #define COMPILATION_TIME    __TIME__

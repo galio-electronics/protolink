@@ -7,7 +7,7 @@
  */
 
 
-#include "../protolink/v2.h"
+#include "../../v2.h"
 
 #define COMPILATION_DATE    __DATE__
 #define COMPILATION_TIME    __TIME__
