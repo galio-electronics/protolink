@@ -29,9 +29,13 @@ void output_leds(boolean state){
 void main(void){
     protolink_io_init();
     while(TRUE){
-        protolink_debug_msg("Hello World\r\n");
-        delay_ms(500);
+        protolink_debug_msg("Hola mundo\r\n");
+
         output_toggle(LED1);     
+        output_leds(1);
+        delay_ms(500);
+        output_leds(0);
+        delay_ms(500);
     }
 }
 
