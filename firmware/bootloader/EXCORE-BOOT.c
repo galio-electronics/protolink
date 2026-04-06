@@ -12,7 +12,7 @@
 #define COMPILATION_DATE    __DATE__
 #define COMPILATION_TIME    __TIME__
 #define HW_NAME     "EXCORE-V1"
-#define BOOT_VER    "BOOT:1.0"
+#define BOOT_VER    "BOOT:1.1"
 #use delay(crystal=16mhz,clock=64mhz)
 #use rs232(baud=115200,parity=N,UART5,bits=8)
 #define _bootloader
