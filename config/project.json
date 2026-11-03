@@ -1,6 +1,6 @@
 {
   "active_profile": "station-master",
-  "port": "COM26",
+  "port": "COM33",
   "baud": 115200,
   "compiler": "C:/Program Files (x86)/PICC/CCSCON.exe",
   "ccs_root": "C:/Program Files (x86)/PICC",
@@ -25,6 +25,10 @@
     "station-rak3172": {
       "source": "firmware/apps/station-rak3172/main.c",
       "description": "RAK3172 UART5 OTAA ChirpStack US915 canales 0-7"
+    },
+    "station-qdy30a": {
+      "source": "firmware/apps/station-qdy30a/main.c",
+      "description": "Qidian QDY30A RS485 UART4 + JSON Ethernet UART3"
     }
   }
 }

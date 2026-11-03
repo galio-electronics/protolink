@@ -1,0 +1,103 @@
+diff --git a/simple_master.c b/simple_master.c
+index 1cca589..5d90290 100644
+--- a/simple_master.c
++++ b/simple_master.c
+@@ -3,15 +3,15 @@
+ // UART por hardware
+ 
+ #if (SMODBUS_SERIAL_INT == SMODBUS_INT_RDA )
+-    #use rs232(baud=SMODBUS_BAUD, UART1, bits=8, stop=2, parity=N, stream=SMODBUS_PORT, errors)
++    #use rs232(baud=SMODBUS_BAUD, UART1, bits=8, stop=SMODBUS_STOP_BITS, parity=N, stream=SMODBUS_PORT, errors)
+ #elif (SMODBUS_SERIAL_INT == SMODBUS_INT_RDA2 )
+-    #use rs232(baud=SMODBUS_BAUD, UART2, bits=8, stop=2, parity=N, stream=SMODBUS_PORT, errors)
++    #use rs232(baud=SMODBUS_BAUD, UART2, bits=8, stop=SMODBUS_STOP_BITS, parity=N, stream=SMODBUS_PORT, errors)
+ #elif (SMODBUS_SERIAL_INT == SMODBUS_INT_RDA3 )
+-    #use rs232(baud=SMODBUS_BAUD, UART3, bits=8, stop=2, parity=N, stream=SMODBUS_PORT, errors)
++    #use rs232(baud=SMODBUS_BAUD, UART3, bits=8, stop=SMODBUS_STOP_BITS, parity=N, stream=SMODBUS_PORT, errors)
+ #elif (SMODBUS_SERIAL_INT == SMODBUS_INT_RDA4 )
+-    #use rs232(baud=SMODBUS_BAUD, UART4, bits=8, stop=2, parity=N, stream=SMODBUS_PORT, errors)
++    #use rs232(baud=SMODBUS_BAUD, UART4, bits=8, stop=SMODBUS_STOP_BITS, parity=N, stream=SMODBUS_PORT, errors)
+ #elif (SMODBUS_SERIAL_INT == SMODBUS_INT_RDA5 )
+-    #use rs232(baud=SMODBUS_BAUD, UART5, bits=8, stop=2, parity=N, stream=SMODBUS_PORT, errors)
++    #use rs232(baud=SMODBUS_BAUD, UART5, bits=8, stop=SMODBUS_STOP_BITS, parity=N, stream=SMODBUS_PORT, errors)
+ #endif
+ 
+ 
+@@ -142,6 +142,7 @@ static void smodbus_set_tx_mode(int1 enable)
+ //      // no-op
+ //   }
+ 
++   SMODBUS_WAIT_TX_DONE(); // Wait for final stop bit before DE falls.
+    smodbus_set_tx_mode(FALSE);
+ }
+ 
+@@ -209,10 +210,10 @@ int8 smodbus_read_frame(unsigned int8 *buf,
+    // 2) LEER HASTA QUE HAYA GAP
+    // ==============================
+    delay_ms(1);
+-   while (TRUE)
++   while (t < timeout_ms)
+    {
+       // Drena todo lo que haya disponible
+-      while (smodbus_rx_available())
++      while (smodbus_rx_available() && len < max_len)
+       {
+          unsigned int8 c = smodbus_rx_get();
+ 
+@@ -225,6 +226,8 @@ int8 smodbus_read_frame(unsigned int8 *buf,
+          gap = 0;   // llegó algo, reseteamos gap
+       }
+ 
++      if(len >= max_len || smodbus_rx_overflowed()) return 0;
++
+       // Si ya tenemos datos, medimos gap para determinar fin de trama
+       if (gap >= gap_ms)
+       {
+@@ -233,12 +236,14 @@ int8 smodbus_read_frame(unsigned int8 *buf,
+ 
+       delay_ms(1);
+       gap++;
++      t++;
+    }
+ 
+ #if SMODBUS_DEBUG == true
+    fprintf(DEBUG,"[FRAME] len final=%lu\r\n", len);
+ #endif
+ 
++   if(t >= timeout_ms) return 0;
+    return len;
+ }
+ 
+@@ -247,7 +252,7 @@ int8 smodbus_read_frame(unsigned int8 *buf,
+ // ===========================================================
+ //  TRANSACCIÓN GENÉRICA MODBUS RTU MAESTRO
+ // ===========================================================
+-#define SMODBUS_MAX_FRAME   256
++#define SMODBUS_MAX_FRAME   255
+ 
+ smodbus_status_t smodbus_transaction(unsigned int8 *req,
+                                             unsigned int8 req_len,
+diff --git a/simple_master.h b/simple_master.h
+index 1ef0091..f09c723 100644
+--- a/simple_master.h
++++ b/simple_master.h
+@@ -15,10 +15,19 @@
+ #ifndef SMODBUS_SERIAL_INT
+   #define SMODBUS_SERIAL_INT SMODBUS_INT_RDA   // Select between external interrupt
+ #endif
++#ifndef SMODBUS_STOP_BITS
++ #define SMODBUS_STOP_BITS 2
++#endif
++
+ #ifndef SMODBUS_BAUD
+  #define SMODBUS_BAUD            9600
+ #endif
+ 
++#ifndef SMODBUS_WAIT_TX_DONE
++ // Conservative fallback: shift register plus UART holding register, 8N2.
++ #define SMODBUS_WAIT_TX_DONE() delay_us((22000000UL+SMODBUS_BAUD-1)/SMODBUS_BAUD)
++#endif
++
+ #ifndef SMODBUS_TX_PIN
+  #define SMODBUS_TX_PIN          PIN_C6
+ #endif

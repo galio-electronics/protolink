@@ -61,6 +61,27 @@ Las librerías propias permanecen en `../simple_master`, `../rui3_at`,
 
 ## Equipo y configuración
 
+### Cambiar puerto COM desde cualquier workspace
+
+1. **Terminal > Ejecutar tarea > Protolink: Seleccionar puerto COM**.
+2. En la terminal aparece una lista como `1. COM26 - Silicon Labs CP210x`.
+3. Escribir el numero o `COM26` y pulsar Enter. `R` actualiza la lista;
+   Enter sin texto cancela sin cambiar nada.
+
+La seleccion se guarda automaticamente en `config/local.json` (fuera de Git)
+y se comparte entre todos los workspaces/apps de este repositorio. No hace
+falta buscar ni editar archivos. La tarea solo enumera puertos: no los abre
+ni reinicia la placa. Cerrar el monitor anterior antes de cargar o monitorear.
+Los procesos ya abiertos conservan su puerto hasta que se cierren.
+
+Cada carga/monitor muestra la aplicacion, el COM y la descripcion. Si el COM
+desaparece, se muestran los disponibles y el nombre de la tarea para elegir otro;
+no se cambia de dispositivo automaticamente.
+
+Tambien disponible desde terminal: `.\tools\run.ps1 select-port` o
+`.\tools\run.ps1 select-port --port COM26` (requiere puerto detectado).
+`--port` en carga/monitor sigue siendo un cambio temporal para esa ejecucion.
+
 Este equipo ya está preparado: COM26, 115200 8N1, CCS 5.081 y pyserial 3.5.
 La secuencia de transistores cruzados está verificada en placa.
 Para otro equipo, instalar Python 3 con launcher `py` y pip, CCS licenciado y
@@ -121,3 +142,6 @@ Aplicacion DHT22 + LCD + Ethernet UART3: [workspace e instrucciones](firmware/ap
 
 Demo RAK3172 UART5 + OTAA ChirpStack US915 canales 0-7:
 [workspace, alta y codec](firmware/apps/station-rak3172/README.md).
+
+Demo Qidian QDY30A por RS485 + JSON Ethernet para ThingsBoard:
+[workspace e instrucciones](firmware/apps/station-qdy30a/README.md).

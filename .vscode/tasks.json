@@ -303,6 +303,32 @@
       "runOptions": {
         "instanceLimit": 1
       }
+    },
+    {
+      "label": "Protolink: Seleccionar puerto COM",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}/tools/run.ps1",
+        "select-port"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true,
+        "clear": true
+      },
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
     }
   ],
   "inputs": [
@@ -315,7 +341,8 @@
         "station-client",
         "station-blink",
         "station-dht22",
-        "station-rak3172"
+        "station-rak3172",
+        "station-qdy30a"
       ],
       "default": "station-master"
     }

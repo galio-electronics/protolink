@@ -7,6 +7,12 @@ modificaron. `config/dependencies.lock.json` registra SHA256 de sus `.c/.h`
 esas diferencias pero no bloquea trabajo deliberado sobre una librería.
 Para adoptar cambios, revisar, probar y actualizar las huellas intencionalmente.
 
+Excepcion incorporada con `station-qdy30a`: `simple_master` ahora permite 8N1,
+espera fin de TX antes de liberar DE y limita la recepcion completa por timeout.
+Las huellas actuales incluyen esos cambios; el parche reproducible esta en
+`patches/simple-master-station-rs485.patch`. Ver la guia de la demo para alcance
+y estado de pruebas fisicas.
+
 | Dependencia | Inclusión actual | Observaciones de integración |
 | --- | --- | --- |
 | CCS 5.081 | `<18F67K40.h>`, `<bootloader.h>`, etc. | Instalación externa licenciada; no editarla/copiarla sin necesidad |

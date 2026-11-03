@@ -4,8 +4,8 @@
     "simple_master": {
       "path": "../simple_master",
       "sha256": {
-        "simple_master.c": "782325afc1e2a2f1d08ef17e41cd40f143e50fe038b5240ce1c0fad152b05a6a",
-        "simple_master.h": "8e577718f0658ab534f280e5d7720a13c391169b0f4cfc018f677c9031bcf1cd"
+        "simple_master.c": "84e97908a43811bf63080234e934cc31539977c78253a91a429cb03d258b2a3a",
+        "simple_master.h": "560598c5013cf8497aa63d84f904fde253e3cb2a11754de5ee92f651f753b353"
       }
     },
     "rui3_at": {

@@ -133,6 +133,31 @@
         "runOptions": {
           "instanceLimit": 1
         }
+      },
+      {
+        "label": "Protolink: Seleccionar puerto COM",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:Cliente Station}/../../../tools/run.ps1",
+          "select-port",
+          "--profile",
+          "station-client"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "focus": true,
+          "clear": true
+        },
+        "runOptions": {
+          "instanceLimit": 1
+        }
       }
     ]
   },

@@ -9,6 +9,7 @@ import time
 from autoboot_probe import crossed_sequence
 from project import ROOT, DEFAULT_CONFIG, load_config, compile_project, dependency_status
 from serial_monitor import monitor, open_serial
+from serial_ports import select_port, require_port
 
 APP_START, FLASH_END = 0x600, 0x20000
 FLASH_ROW = 128  # PIC18F67K40 / CCS 5.081
@@ -147,7 +148,7 @@ def upload(config, lines, monitor_seconds=5, commands=()):
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('action', choices=['build', 'check', 'upload', 'build-upload',
-                                      'build-upload-monitor', 'monitor', 'select', 'profiles', 'dependencies', 'tests'])
+                                      'build-upload-monitor', 'monitor', 'select', 'select-port', 'profiles', 'dependencies', 'tests'])
     ap.add_argument('--config', type=Path, default=DEFAULT_CONFIG)
     ap.add_argument('--profile')
     ap.add_argument('--port')
@@ -156,7 +157,12 @@ def main():
     args = ap.parse_args()
     if args.seconds is not None and args.seconds < 0:
         ap.error('--seconds debe ser >= 0')
-    config = load_config(args.config, args.profile, args.port)
+    config = load_config(args.config, args.profile, None if args.action == 'select-port' else args.port)
+    if args.action == 'select-port':
+        select_port(config['port'], args.port)
+        return 0
+    if args.action in ('upload', 'build-upload', 'build-upload-monitor', 'monitor'):
+        require_port(config)
     if args.action == 'tests':
         import unittest
         suite = unittest.defaultTestLoader.discover(str(ROOT/'tests'))
