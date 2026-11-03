@@ -112,3 +112,9 @@ Documentación adicional: [protocolo serie](docs/serial-protocol.md),
 [auto-boot](docs/autoboot.md), [documentación original V2](docs/legacy-v2.md).
 
 Resultados de compilación y pruebas físicas: [validación](docs/validation.md).
+
+El perfil `station-client` incluye ahora el ejemplo LCD 16x2 validado en placa.
+El cargador informa líneas/registros y tiempos; la prueba del mismo HEX pasó de
+5.215 s a 3.518 s de entrada+carga. Detalles en [validación](docs/validation.md).
+
+Aplicacion DHT22 + LCD + Ethernet UART3: [workspace e instrucciones](firmware/apps/station-dht22/README.md).

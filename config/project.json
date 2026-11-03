@@ -6,8 +6,21 @@
   "ccs_root": "C:/Program Files (x86)/PICC",
   "library_root": "G:/Proyectos/PIC",
   "profiles": {
-    "station-master": {"source": "firmware/station/main.c", "description": "Firmware maestro Station"},
-    "station-client": {"source": "firmware/examples/station-client/main.c", "description": "Plantilla de aplicacion para clientes"},
-    "station-blink": {"source": "firmware/examples/protolink-hello-world.c", "description": "Ejemplo minimo original, sin consola"}
+    "station-master": {
+      "source": "firmware/station/main.c",
+      "description": "Firmware maestro Station"
+    },
+    "station-client": {
+      "source": "firmware/examples/station-client/main.c",
+      "description": "Plantilla de aplicacion para clientes"
+    },
+    "station-blink": {
+      "source": "firmware/examples/protolink-hello-world.c",
+      "description": "Ejemplo minimo original, sin consola"
+    },
+    "station-dht22": {
+      "source": "firmware/apps/station-dht22/main.c",
+      "description": "DHT22 + LCD + telemetria JSON por Ethernet UART3"
+    }
   }
 }

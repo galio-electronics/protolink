@@ -82,3 +82,18 @@ Ambos scripts originales cierran el puerto al terminar y no confirman el banner.
 El diagnóstico nuevo captura el banner, pero tampoco sustituye Galio Flash Tool.
 La documentación de [pySerial](https://pyserial.readthedocs.io/en/latest/pyserial_api.html)
 advierte de posibles transitorios de DTR/RTS al abrir el puerto.
+
+## Cargador optimizado
+
+`tools/station_upload.py` usa ahora registros de hasta 26 bytes, sin cruzar filas
+flash de 128 bytes del PIC18F67K40. Cada línea ocupa como máximo los 64 bytes del
+buffer del loader, incluido CR, y cada registro espera XOFF/ACK/XON antes del
+siguiente. El script conserva los fuses y la reserva del bootloader.
+
+Secuencia del cargador: reposo 50 ms, RESET 200 ms, BOOT posterior 200 ms.
+La recepción del banner se captura durante esa secuencia. El envío empieza al
+cumplir 1050 ms desde el banner completo, sin volver a sumar toda la espera.
+El script de diagnóstico conserva sus tiempos conservadores configurables.
+
+La consola informa líneas HEX originales, registros normalizados, bytes serie y
+tiempos de transferencia/entrada+carga. Ver los resultados en `validation.md`.

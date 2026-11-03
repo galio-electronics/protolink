@@ -39,3 +39,8 @@ externos y no se declara validación funcional de LoRa, Modbus, LCD u OLED.
 Para nuevas librerías compartidas, usar carpeta/repositorio hermano con `.h`, `.c`,
 README y ejemplos. Agregar al workspace, rutas de inclusión y manifiesto. Para una
 función exclusiva de cliente usar un módulo dentro de su aplicación.
+
+El ejemplo cliente ahora muestra un mensaje LCD 16x2 por I2C1; su configuración e
+inicialización permanecen en la aplicación cliente. La librería PCF8574 se utiliza
+a 100 kHz, conforme al [datasheet de TI](https://www.ti.com/lit/ds/symlink/pcf8574.pdf).
+La dirección 0x27 de 7 bits se convierte a 0x4E para el driver existente.

@@ -19,6 +19,9 @@ void main(void)
    app_init();
    while(TRUE)
    {
+#ifdef APP_FAST_TASK
+      app_task(); // Avance breve de drivers cooperativos que requieren sub-ms.
+#endif
       now = protolink_millis();
       diagnostics_task(station_state.inputs_raw);
       if((unsigned int32)(now-last_inputs) >= 10)

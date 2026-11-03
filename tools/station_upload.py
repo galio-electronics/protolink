@@ -11,6 +11,8 @@ from project import ROOT, DEFAULT_CONFIG, load_config, compile_project, dependen
 from serial_monitor import monitor, open_serial
 
 APP_START, FLASH_END = 0x600, 0x20000
+FLASH_ROW = 128  # PIC18F67K40 / CCS 5.081
+MAX_RECORD_DATA = 26  # 64 caracteres incluyendo CR; buffer del loader = 64
 
 
 def record(kind, address=0, data=b''):
@@ -52,65 +54,73 @@ def prepare_hex(path):
             raise ValueError(f'HEX linea {number}: tipo/formato no admitido ({kind})')
     if not eof or any(a not in memory for a in range(APP_START, APP_START + 4)):
         raise ValueError('Falta EOF o vector de reset de aplicacion en 0x0600')
-    # Enviar ascendente y sin huecos para pasar por cada limite de borrado.
-    # 16 bytes -> 44 caracteres con CR, dentro del buffer de 64 del loader.
+    # Ascendente, sin huecos y sin cruzar filas flash de 128 bytes.
+    # 26 bytes -> 64 caracteres con CR; data[32] del loader tambien alcanza.
     end = (max(memory) + 16) & ~15
     lines, bank = [], None
-    for start in range(APP_START, end, 16):
+    start = APP_START
+    while start < end:
         if start >> 16 != bank:
             bank = start >> 16
             lines.append(record(4, data=bank.to_bytes(2, 'big')))
+        count = min(MAX_RECORD_DATA, FLASH_ROW - start % FLASH_ROW, end - start)
         lines.append(record(0, start & 0xFFFF,
-                            bytes(memory.get(a, 255) for a in range(start, start + 16))))
+                            bytes(memory.get(a, 255) for a in range(start, start + count))))
+        start += count
     lines.append(record(1))
     return lines, len(memory), skipped
 
 
 def await_ack(ser, timeout=3):
-    deadline, ack, stopped = time.monotonic() + timeout, False, False
+    deadline = time.monotonic() + timeout
+    expected = b'\x13\x06\x11'
+    received = bytearray()
     while time.monotonic() < deadline:
-        value = ser.read(1)
-        if not value:
+        chunk = ser.read(len(expected) - len(received))
+        if not chunk:
             continue
-        if value == b'\x13' and not stopped and not ack:
-            stopped = True
-        elif value == b'\x06' and stopped and not ack:
-            ack = True
-        elif value == b'\x11' and stopped:
-            if not ack:
-                raise RuntimeError('Loader rechazo el registro (XON sin ACK)')
+        received.extend(chunk)
+        if not expected.startswith(received):
+            raise RuntimeError(f'Registro rechazado o respuesta inesperada: {bytes(received)!r}')
+        if len(received) == len(expected):
             return
-        else:
-            raise RuntimeError(f'Respuesta inesperada del loader: {value!r}')
     raise TimeoutError('Sin ACK/XON; carga interrumpida. Reintentar desde el inicio')
 
 
 def upload(config, lines, monitor_seconds=5, commands=()):
+    upload_started = time.perf_counter()
     ser = open_serial(config)
     try:
-        time.sleep(0.3)
+        time.sleep(0.05)
         ser.reset_input_buffer()
         rx = bytearray()
+        expected = b'name=Protolink-Station-Monitor,version=BOOT:1.2,'
+        banner_completed_at = None
 
         def wait(ms):
+            nonlocal banner_completed_at
             deadline = time.monotonic() + ms / 1000
             while time.monotonic() < deadline:
                 rx.extend(ser.read(ser.in_waiting or 1))
+                if banner_completed_at is None and expected in rx and b'\n' in rx[rx.find(expected):]:
+                    banner_completed_at = time.perf_counter()
 
-        crossed_sequence(lambda line, value: setattr(ser, line, value), wait, 100, 200, 500)
-        expected = b'name=Protolink-Station-Monitor,version=BOOT:1.2,'
+        crossed_sequence(lambda line, value: setattr(ser, line, value), wait, 50, 200, 200)
         deadline = time.monotonic() + 3
         while expected not in rx or b'\n' not in rx[rx.find(expected):]:
             if time.monotonic() >= deadline:
                 raise TimeoutError(f'No se identifico el bootloader esperado. RX={bytes(rx)!r}')
             wait(20)
         print(bytes(rx).decode('ascii', errors='replace').strip(), flush=True)
-        # Margen despues del banner: el firmware espera 1000 ms antes de getc().
-        time.sleep(1.2)
+        # El loader espera 1 s tras el banner; descontar lo ya esperado con BOOT.
+        if banner_completed_at is None:
+            banner_completed_at = time.perf_counter()
+        time.sleep(max(0, 1.05 - (time.perf_counter()-banner_completed_at)))
+        transfer_started = time.perf_counter()
         for index, line in enumerate(lines, 1):
             if ser.write(line) != len(line):
                 raise RuntimeError('Escritura serie incompleta')
-            ser.flush()
+            # El ACK demuestra recepcion; flush() por registro era redundante.
             await_ack(ser)
             if index % 32 == 0 or index == len(lines):
                 print(f'Carga: {index}/{len(lines)} registros', flush=True)
@@ -121,6 +131,8 @@ def upload(config, lines, monitor_seconds=5, commands=()):
             final.extend(ser.read(2-len(final)))
         if final != b'\x06\x11':
             raise RuntimeError('Falta confirmacion final de EOF')
+        elapsed = time.perf_counter() - transfer_started
+        print(f'TRANSFER {len(lines)} registros en {elapsed:.3f} s; entrada+carga {time.perf_counter()-upload_started:.3f} s', flush=True)
         print('Carga aceptada. Capturando reinicio sin cerrar el puerto; no hay lectura de flash.')
         monitor(ser, ROOT/'logs', config['profile'], monitor_seconds, commands)
     finally:
@@ -179,6 +191,8 @@ def main():
         path = config['hex_path']
     lines, size, skipped = prepare_hex(path)
     print(f'HEX validado: {size} bytes de aplicacion; {skipped} bytes de fuses excluidos.', flush=True)
+    original_records = sum(1 for line in path.read_text().splitlines() if line.startswith(':'))
+    print(f'HEX original: {original_records} lineas; carga: {len(lines)} registros, {sum(map(len,lines))} bytes serie.', flush=True)
     print(f'Archivo: {path}', flush=True)
     if args.action in ('upload', 'build-upload', 'build-upload-monitor'):
         seconds = args.seconds if args.seconds is not None else (0 if args.action.endswith('monitor') else 5)

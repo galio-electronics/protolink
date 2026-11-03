@@ -313,7 +313,8 @@
       "options": [
         "station-master",
         "station-client",
-        "station-blink"
+        "station-blink",
+        "station-dht22"
       ],
       "default": "station-master"
     }
