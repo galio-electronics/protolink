@@ -21,6 +21,10 @@
     "station-dht22": {
       "source": "firmware/apps/station-dht22/main.c",
       "description": "DHT22 + LCD + telemetria JSON por Ethernet UART3"
+    },
+    "station-rak3172": {
+      "source": "firmware/apps/station-rak3172/main.c",
+      "description": "RAK3172 UART5 OTAA ChirpStack US915 canales 0-7"
     }
   }
 }

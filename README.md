@@ -118,3 +118,6 @@ El cargador informa líneas/registros y tiempos; la prueba del mismo HEX pasó d
 5.215 s a 3.518 s de entrada+carga. Detalles en [validación](docs/validation.md).
 
 Aplicacion DHT22 + LCD + Ethernet UART3: [workspace e instrucciones](firmware/apps/station-dht22/README.md).
+
+Demo RAK3172 UART5 + OTAA ChirpStack US915 canales 0-7:
+[workspace, alta y codec](firmware/apps/station-rak3172/README.md).

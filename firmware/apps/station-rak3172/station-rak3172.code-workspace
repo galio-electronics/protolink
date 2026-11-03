@@ -1,0 +1,149 @@
+{
+  "folders": [
+    {
+      "name": "Station RAK3172",
+      "path": "."
+    },
+    {
+      "name": "Protolink common",
+      "path": "../../common"
+    },
+    {
+      "name": "Galio simple_master",
+      "path": "../../../../simple_master"
+    },
+    {
+      "name": "Galio rui3_at",
+      "path": "../../../../rui3_at"
+    },
+    {
+      "name": "Galio lcd_i2c",
+      "path": "../../../../lcd_i2c"
+    },
+    {
+      "name": "Galio oled_i2c",
+      "path": "../../../../oled_i2c"
+    }
+  ],
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "RAK3172: Compilar",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:Station RAK3172}/../../../tools/run.ps1",
+          "build",
+          "--profile",
+          "station-rak3172"
+        ],
+        "problemMatcher": [
+          {
+            "owner": "ccs",
+            "source": "CCS 5.081",
+            "fileLocation": "absolute",
+            "pattern": {
+              "regexp": "^(.*):(\\d+):(\\d+):\\s+(error|warning) CCS(\\d+): (.*)$",
+              "file": 1,
+              "line": 2,
+              "column": 3,
+              "severity": 4,
+              "code": 5,
+              "message": 6
+            }
+          }
+        ],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "focus": false
+        },
+        "runOptions": {
+          "instanceLimit": 1
+        },
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        }
+      },
+      {
+        "label": "RAK3172: Compilar, subir y monitorear",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:Station RAK3172}/../../../tools/run.ps1",
+          "build-upload-monitor",
+          "--profile",
+          "station-rak3172"
+        ],
+        "problemMatcher": [
+          {
+            "owner": "ccs",
+            "source": "CCS 5.081",
+            "fileLocation": "absolute",
+            "pattern": {
+              "regexp": "^(.*):(\\d+):(\\d+):\\s+(error|warning) CCS(\\d+): (.*)$",
+              "file": 1,
+              "line": 2,
+              "column": 3,
+              "severity": 4,
+              "code": 5,
+              "message": 6
+            }
+          }
+        ],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "focus": true
+        },
+        "runOptions": {
+          "instanceLimit": 1
+        }
+      },
+      {
+        "label": "RAK3172: Monitor serie",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:Station RAK3172}/../../../tools/run.ps1",
+          "monitor",
+          "--profile",
+          "station-rak3172"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "focus": true
+        },
+        "runOptions": {
+          "instanceLimit": 1
+        }
+      }
+    ]
+  },
+  "settings": {
+    "files.autoSave": "afterDelay",
+    "C_Cpp.errorSquiggles": "disabled",
+    "C_Cpp.default.includePath": [
+      "${workspaceFolder:Station RAK3172}/../../../**",
+      "G:/Proyectos/PIC",
+      "C:/Program Files (x86)/PICC/Devices",
+      "C:/Program Files (x86)/PICC/Drivers"
+    ]
+  }
+}

@@ -7,3 +7,7 @@
 
 # Diagnosticos generados por CCS fuera de build/
 *.err
+
+# Credenciales OTAA locales
+/firmware/apps/station-rak3172/credentials.local.h
+/firmware/apps/station-rak3172/registration.local.json

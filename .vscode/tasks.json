@@ -314,7 +314,8 @@
         "station-master",
         "station-client",
         "station-blink",
-        "station-dht22"
+        "station-dht22",
+        "station-rak3172"
       ],
       "default": "station-master"
     }
