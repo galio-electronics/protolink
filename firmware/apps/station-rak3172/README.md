@@ -36,7 +36,26 @@ ABP: se derivan durante OTAA. El DevEUI identifica el modulo; no es una clave.
 En un clon nuevo ejecutar `python tools/rak3172_credentials.py` desde la raiz
 antes de compilar. El generador no sobrescribe credenciales existentes.
 
+### Cambio de modulo RAK
+
+La demo consulta `AT+DEVEUI=?` y conserva el DevEUI de fabrica de cada modulo.
+Al reemplazarlo, copiar el identificador de la linea
+`LORA query=2 AT+DEVEUI=...` y darlo de alta en ChirpStack. El mismo firmware
+configura el JoinEUI y AppKey de `credentials.local.h` en el nuevo modulo.
+El DevEUI de `registration.local.json` es un registro local del primer modulo;
+no se actualiza automaticamente ni se utiliza para programar la identidad.
+`RAK_DETECTADO` confirma UART; solo `JOINED` confirma la activacion LoRaWAN.
+
 ## Payload y consola
+
+Desde 0.2.2, si el ping AT no recibe OK en tres segundos, la consola avisa
+`WARN RAK_NO_DETECTADO` e indica revisar alimentacion, socket, TX/RX de UART5,
+115200 baud y modo AT. Esto indica falta de respuesta, no confirma ausencia
+fisica: un baudrate o firmware distinto tambien puede causarlo. Reintenta cada
+60 segundos. `INFO RAK_DETECTADO UART5: AT OK` confirma la comunicacion.
+Si un comando posterior vence, muestra `RAK_SIN_RESPUESTA`, apaga el estado de
+union y vuelve a comprobar AT antes de configurar. LED3 vuelve a parpadear.
+`JOIN_FAILED` sigue siendo un fallo de union a la red, separado de este aviso.
 
 Desde firmware 0.2.1, LED3 parpadea (500 ms encendido / 500 ms apagado)
 durante la configuracion, busqueda y reintentos de red. Queda encendido tras

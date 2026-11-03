@@ -54,6 +54,8 @@ void demo_line(void)
    else if(!strcmp(response,"OK") && pending)
    {
       pending=FALSE;
+      if(step==0)
+         printf(diagnostics_putc,"INFO RAK_DETECTADO UART5: AT OK\r\n");
       if(step<14) { ++step; next_ms=now+200; }
    }
    else if(!strncmp(response,"AT_",3))
@@ -142,7 +144,14 @@ void app_task_100ms(void)
          pending=FALSE; join_wait=FALSE; tx_wait=FALSE;
          response_len=0; overflow=FALSE;
          next_ms=now+DEMO_INTERVAL_MS;
-         printf(diagnostics_putc,"LORA AT_TIMEOUT step=%u retry=60s\r\n",step);
+         if(step==0)
+            printf(diagnostics_putc,"WARN RAK_NO_DETECTADO: sin OK UART5. Revisar alimentacion/socket/TX-RX/baud 115200/modo AT. retry=60s\r\n");
+         else
+            printf(diagnostics_putc,"WARN RAK_SIN_RESPUESTA step=%u: revisar UART5/alimentacion. Reintento AT en 60s\r\n",step);
+         // Recheck communication before configuring or sending again.
+         // A silent modem does not prove physical absence or network failure.
+         joined=FALSE;
+         step=0;
       }
       return;
    }
