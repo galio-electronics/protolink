@@ -1,0 +1,17 @@
+{
+  "files.associations": {
+    "*.h": "c"
+  },
+  "files.encoding": "utf8",
+  "files.eol": "\r\n",
+  "C_Cpp.errorSquiggles": "disabled",
+  "search.exclude": {
+    "**/build": true,
+    "**/.venv": true,
+    "**/__pycache__": true
+  },
+  "files.exclude": {
+    "**/__pycache__": true
+  },
+  "task.saveBeforeRun": "always"
+}

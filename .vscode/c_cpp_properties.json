@@ -1,0 +1,33 @@
+{
+  "configurations": [
+    {
+      "name": "CCS (navegacion)",
+      "compilerPath": "",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "C:/Program Files (x86)/PICC/Devices",
+        "C:/Program Files (x86)/PICC/Drivers",
+        "G:/Proyectos/PIC"
+      ],
+      "defines": [
+        "__ISNT_CCS__",
+        "PROTOLINK_DEFAULT=1",
+        "STATION_DEBUG_ENABLED=1",
+        "STATION_DEBUG_UART=1"
+      ],
+      "browse": {
+        "path": [
+          "${workspaceFolder}",
+          "G:/Proyectos/PIC/simple_master",
+          "G:/Proyectos/PIC/rui3_at",
+          "G:/Proyectos/PIC/lcd_i2c",
+          "G:/Proyectos/PIC/oled_i2c",
+          "C:/Program Files (x86)/PICC/Devices",
+          "C:/Program Files (x86)/PICC/Drivers"
+        ],
+        "limitSymbolsToIncludedHeaders": true
+      }
+    }
+  ],
+  "version": 4
+}

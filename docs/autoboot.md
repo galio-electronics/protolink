@@ -1,0 +1,84 @@
+# Auto-boot Station / Monitor: secuencia verificada
+
+## Circuito confirmado por esquema
+
+Dos NPN SS8050 cruzados: T2 tiene base en DTR (por R24) y emisor en RTS;
+su colector va a MCLR. T1 tiene base en RTS (por R23), emisor en DTR y
+colector en BOOT. Las salidas necesitan sus polarizaciones de placa.
+DTR y RTS NO son controles independientes de RESET y BOOT.
+
+Con CP210x, True en la API corresponde a nivel bajo de la señal USB:
+
+| DTR API | RTS API | Resultado del circuito |
+| --- | --- | --- |
+| False | False | Ambos transistores apagados; MCLR y BOOT liberados |
+| False | True | MCLR bajo (RESET), BOOT liberado |
+| True | False | MCLR liberado, BOOT bajo |
+| True | True | Ambos transistores apagados; MCLR y BOOT liberados |
+
+## Secuencia para Galio Flash Tool
+
+```python
+# Preparar antes de abrir: dtr=False, rts=False.
+# Sin control automatico RTS/CTS ni DSR/DTR.
+ser.dtr = False
+ser.rts = False
+time.sleep(0.100)
+ser.rts = True          # RESET activo
+time.sleep(0.200)
+ser.dtr = True
+ser.rts = False         # BOOT activo; sin espera entre estos dos comandos
+time.sleep(0.500)
+ser.dtr = False         # BOOT liberado
+```
+
+El pulso RESET debe durar 200 ms (la linea correspondiente es
+`time.sleep(0.200)`). Las dos escrituras de transición no son atómicas: no
+introducir una espera entre ellas. Capturar RX desde antes de liberar RESET,
+sin purgar el buffer después. Mantener abierto el mismo puerto para la carga.
+La identificación llega antes de que el loader acepte datos: esperar 1200 ms
+después de recibir su línea completa antes del primer registro HEX, pues el
+firmware ejecuta `delay_ms(1000)` tras el banner. Conservar ACK/XON/XOFF del
+cargador existente. El script de diagnóstico no transmite datos.
+
+## Ejecutar la prueba
+
+Desde la raíz del repositorio, con el entorno local preparado:
+
+```powershell
+& '.\.venv\Scripts\python.exe' tools\autoboot_probe.py --port COM26 --circuit crossed
+```
+
+Para otro equipo: Python 3 y pyserial 3.5. `--dry-run --circuit crossed`
+muestra la secuencia sin abrir hardware. El modo `independent` queda disponible
+para comparar otros circuitos, pero no corresponde a esta placa.
+
+## Resultado real del 2 de noviembre de 2026
+
+La prueba con circuito cruzado fue exitosa en COM26, 115200 8N1:
+
+- RTS=True a 482.7 ms: RESET activo.
+- DTR=True a 683.9 ms y RTS=False a 684.2 ms: transición a BOOT.
+- Identificación completa recibida a 694.6 ms:
+  `name=Protolink-Station-Monitor,version=BOOT:1.2,date=2-Nov-26,time=21:14:39`.
+- DTR=False a 1194.9 ms: BOOT liberado.
+- Sin escritura de flash. No se probó transferencia de HEX en esta sesión.
+
+Las pruebas previas de 500 ms y 2 s no recibieron datos porque usaban el
+modelo de controles independientes. No demostraban un fallo de hardware.
+
+## Corrección del análisis inicial de los scripts
+
+`G:/Python/script autoboot pic.py` SI usa la secuencia adecuada para este
+esquema: (False,True) durante 2 s fuerza RESET; (True,False) durante 200 ms
+fuerza BOOT; después libera DTR. Sus comentarios eléctricos son incorrectos,
+lo que llevó a interpretar erróneamente la secuencia antes de ver el esquema.
+
+`G:/Python/autoboot_cp2102_pic.py` trata las líneas como independientes.
+En este circuito, pasar por (True,True) libera ambos transistores, por lo que
+no representa el pulso de RESET que describen sus comentarios.
+
+Ambos scripts originales cierran el puerto al terminar y no confirman el banner.
+El diagnóstico nuevo captura el banner, pero tampoco sustituye Galio Flash Tool.
+La documentación de [pySerial](https://pyserial.readthedocs.io/en/latest/pyserial_api.html)
+advierte de posibles transitorios de DTR/RTS al abrir el puerto.

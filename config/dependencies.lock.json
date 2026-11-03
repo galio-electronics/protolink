@@ -1,0 +1,34 @@
+{
+  "ccs_version": "5.081",
+  "libraries": {
+    "simple_master": {
+      "path": "../simple_master",
+      "sha256": {
+        "simple_master.c": "782325afc1e2a2f1d08ef17e41cd40f143e50fe038b5240ce1c0fad152b05a6a",
+        "simple_master.h": "8e577718f0658ab534f280e5d7720a13c391169b0f4cfc018f677c9031bcf1cd"
+      }
+    },
+    "rui3_at": {
+      "path": "../rui3_at",
+      "sha256": {
+        "rui3_at.c": "90eb0985aee122fb60c0c1410c7e20b70814a94600962d5c7401b899f234d386",
+        "rui3_at.h": "8a561f30d76926a39b844f733f5d1b7072a339718e1a05adee8e50f74eca3998"
+      }
+    },
+    "lcd_i2c": {
+      "path": "../lcd_i2c",
+      "sha256": {
+        "lcd_i2c.c": "5069114a81cc4febe7a27cbb525cd0c0c73c7111fcc65a17b7c814bc6bbbec76"
+      }
+    },
+    "oled_i2c": {
+      "path": "../oled_i2c",
+      "sha256": {
+        "fonts/font5x7.h": "541539e1c1e73ca337aa4cc502394f93c9fbab87875875dd57ef05ed33f64b48",
+        "images/galio_logo_128x32.h": "f52ff4c3a25a1779bfff14df6ed0737bc25f826e23f7c2df16509cdf22802d3e",
+        "oled_ssd1306.c": "b344361aee8c870ef0a1ddfd219942192c8a68c38f27b58af8e993916abf8869",
+        "oled_ssd1306.h": "6501366eb5630b36326b118ee54ea3457f96f692df7abed811ffa35b9dba8200"
+      }
+    }
+  }
+}

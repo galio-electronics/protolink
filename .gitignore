@@ -1,0 +1,9 @@
+/build/
+/logs/
+/.venv/
+**/__pycache__/
+*.pyc
+/config/local.json
+
+# Diagnosticos generados por CCS fuera de build/
+*.err

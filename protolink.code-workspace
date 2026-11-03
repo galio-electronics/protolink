@@ -1,0 +1,11 @@
+{
+  "folders": [
+    {"name": "Protolink Firmware", "path": "."},
+    {"name": "Galio simple_master", "path": "../simple_master"},
+    {"name": "Galio rui3_at", "path": "../rui3_at"},
+    {"name": "Galio lcd_i2c", "path": "../lcd_i2c"},
+    {"name": "Galio oled_i2c", "path": "../oled_i2c"},
+    {"name": "Station MPLAB (ICSP / legacy)", "path": "C:/Users/artga/MPLABXProjects/ProtoLink-Station.X"}
+  ],
+  "settings": {"files.autoSave": "afterDelay"}
+}

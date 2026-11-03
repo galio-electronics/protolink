@@ -1,0 +1,13 @@
+{
+  "active_profile": "station-master",
+  "port": "COM26",
+  "baud": 115200,
+  "compiler": "C:/Program Files (x86)/PICC/CCSCON.exe",
+  "ccs_root": "C:/Program Files (x86)/PICC",
+  "library_root": "G:/Proyectos/PIC",
+  "profiles": {
+    "station-master": {"source": "firmware/station/main.c", "description": "Firmware maestro Station"},
+    "station-client": {"source": "firmware/examples/station-client/main.c", "description": "Plantilla de aplicacion para clientes"},
+    "station-blink": {"source": "firmware/examples/protolink-hello-world.c", "description": "Ejemplo minimo original, sin consola"}
+  }
+}
