@@ -11,3 +11,6 @@
 # Credenciales OTAA locales
 /firmware/apps/station-rak3172/credentials.local.h
 /firmware/apps/station-rak3172/registration.local.json
+
+# Configuracion privada de LTE / MQTT
+/firmware/apps/station-qdy30a-lte/lte_config.local.h

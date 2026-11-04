@@ -29,6 +29,14 @@
         "oled_ssd1306.c": "b344361aee8c870ef0a1ddfd219942192c8a68c38f27b58af8e993916abf8869",
         "oled_ssd1306.h": "6501366eb5630b36326b118ee54ea3457f96f692df7abed811ffa35b9dba8200"
       }
+    },
+    "lte-module": {
+      "path": "../lte-module",
+      "sha256": {
+        "common/lte_at.h": "2048875e313b2cee6cfdfba315e3649a4207e9998a9ee384591e210b807095ff",
+        "common/lte_at.c": "ee156c2a79d71d0bc1048b3a10f6804cfd7273a365c54ddfc0506134fba1d439",
+        "simcom/a7670.c": "72b578951599ef5a0913d57de97f225b6f6f1b6d594985cd1c6d99dd57ad6060"
+      }
     }
   }
 }

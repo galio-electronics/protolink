@@ -342,7 +342,8 @@
         "station-blink",
         "station-dht22",
         "station-rak3172",
-        "station-qdy30a"
+        "station-qdy30a",
+        "station-qdy30a-lte"
       ],
       "default": "station-master"
     }

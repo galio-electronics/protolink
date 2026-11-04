@@ -29,6 +29,10 @@
     "station-qdy30a": {
       "source": "firmware/apps/station-qdy30a/main.c",
       "description": "Qidian QDY30A RS485 UART4 + JSON Ethernet UART3"
+    },
+    "station-qdy30a-lte": {
+      "source": "firmware/apps/station-qdy30a-lte/main.c",
+      "description": "QDY30A RS485 UART4 + SIMCom A7670 UART5 MQTT celular"
     }
   }
 }
