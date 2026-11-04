@@ -48,6 +48,30 @@ no se actualiza automaticamente ni se utiliza para programar la identidad.
 
 ## Payload y consola
 
+### OLED (firmware 0.2.3)
+
+OLED SSD1306 de 128x64, direccion I2C de 7 bits `0x3C`, conectada a
+I2C1: SCL=RC3 y SDA=RC4, con tierra comun y pull-ups adecuados al modulo.
+El bus funciona a 400 kHz. Se reutiliza la libreria externa `oled_i2c`.
+
+La pantalla muestra `RAK3172 / DHT22`, temperatura en Celsius y humedad
+relativa en porcentaje, ambas con un decimal (incluidas temperaturas negativas).
+Se actualiza con cada lectura del DHT22; ante error muestra guiones y el codigo
+del sensor. Al inicio o tras 15 segundos sin dato reciente muestra guiones y
+`Sin dato reciente`, evitando presentar mediciones antiguas como actuales.
+
+La app comprueba presencia al arrancar y reporta `OLED ... presente=0/1` en
+consola. Si no responde, continua sin pantalla. Conectar antes de reiniciar.
+El refresco escribe un caracter cada 10 ms y se pausa durante la captura DHT22.
+No cambia el intervalo de muestreo ni el payload LoRaWAN.
+
+Validacion 0.2.3: compilacion CCS 5.081 sin errores, una advertencia preexistente
+(`ctx` en RUI3), ROM 11%, RAM 34-37%; HEX validado para el bootloader.
+Cargado por COM26: arranque en 0.2.3, OLED detectada, DHT22 a 26.0 C y
+45.1-45.2 %RH, JOINED y TX_DONE confirmados por consola. Log local:
+`logs/20261103-200908-200249-station-rak3172.log`.
+Pendiente comprobar visualmente el contenido en la OLED fisica.
+
 Desde 0.2.2, si el ping AT no recibe OK en tres segundos, la consola avisa
 `WARN RAK_NO_DETECTADO` e indica revisar alimentacion, socket, TX/RX de UART5,
 115200 baud y modo AT. Esto indica falta de respuesta, no confirma ausencia

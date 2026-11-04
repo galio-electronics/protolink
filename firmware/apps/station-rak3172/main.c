@@ -4,6 +4,12 @@
 #include "../../common/diagnostics.h"
 #pin_select U5TX=TX_5
 #pin_select U5RX=RX_5
+#pin_select SCL1IN=PIN_SCL
+#pin_select SDA1IN=PIN_SDA
+#pin_select SCL1OUT=PIN_SCL
+#pin_select SDA1OUT=PIN_SDA
+#use i2c(Master,I2C1,FAST=400000,STREAM=OLED_I2C)
+#define OLED_I2C_STREAM OLED_I2C
 #include "../../common/library_config.h"
 #include "../../common/dht22.c"
 
@@ -22,6 +28,63 @@ static unsigned int8 sensor_status=DHT22_PENDING;
 static unsigned int32 sample_ms=0;
 static signed int16 temperature_x10=0;
 static unsigned int16 humidity_x10=0;
+static int1 display_present=FALSE;
+static char display_lines[3][22];
+static unsigned int8 display_cursor=63;
+
+// Pad complete lines so shorter values cannot leave old digits visible.
+void demo_display_set(unsigned int8 row, char *text)
+{
+   unsigned int8 i;
+   int1 ended=FALSE;
+   for(i=0;i<21;i++)
+   {
+      if(!ended && !text[i]) ended=TRUE;
+      display_lines[row][i]=ended ? ' ' : text[i];
+   }
+   display_lines[row][21]=0;
+}
+
+void demo_display_update(void)
+{
+   char line[22];
+   unsigned int16 magnitude;
+   if(sensor_status==DHT22_OK)
+   {
+      magnitude=temperature_x10<0 ? -temperature_x10 : temperature_x10;
+      sprintf(line,"Temp: %c%LU.%u C",temperature_x10<0 ? '-' : ' ',
+         (unsigned int32)(magnitude/10),(unsigned int8)(magnitude%10));
+      demo_display_set(0,line);
+      sprintf(line,"Humedad: %LU.%u %%",(unsigned int32)(humidity_x10/10),
+         (unsigned int8)(humidity_x10%10));
+      demo_display_set(1,line);
+      demo_display_set(2,"DHT22 OK");
+   }
+   else
+   {
+      demo_display_set(0,"Temp: --.- C");
+      demo_display_set(1,"Humedad: --.- %");
+      if(sensor_status==DHT22_PENDING)
+         demo_display_set(2,"Sin dato reciente");
+      else
+      {
+         sprintf(line,"Error DHT22: %u",sensor_status);
+         demo_display_set(2,line);
+      }
+   }
+   display_cursor=0;
+}
+
+void demo_display_task(void)
+{
+   unsigned int8 row, col;
+   if(!display_present || display_cursor>=63 || dht22_busy()) return;
+   row=display_cursor/21;
+   col=display_cursor%21;
+   if(col==0) oled_set_pos(0,2+row*2);
+   oled_putc(display_lines[row][col]);
+   ++display_cursor;
+}
 
 void demo_send(char *text)
 {
@@ -80,6 +143,16 @@ void app_init(void)
    setup_uart(RUI3_AT_BAUD,RUI3_UART);
    rui3_at_init();
    dht22_init();
+   i2c_start(OLED_I2C);
+   display_present=(i2c_write(OLED_I2C,OLED_I2C_ADDR_WRITE)==0);
+   i2c_stop(OLED_I2C);
+   if(display_present)
+   {
+      oled_init();
+      oled_print_xy(0,0,"RAK3172 / DHT22");
+   }
+   demo_display_update();
+   printf(diagnostics_putc,"INFO OLED SSD1306 I2C1 0x3C presente=%u\r\n",display_present);
    printf(diagnostics_putc,"LORA UART5 RE2/RE3 115200 US915 channels=0-7\r\n");
 }
 
@@ -119,8 +192,14 @@ void app_task_10ms(unsigned int8 inputs_raw)
          humidity_x10=dht22_humidity_x10;
       }
       else { temperature_x10=0; humidity_x10=0; }
+      demo_display_update();
       printf(diagnostics_putc,"DHT status=%u temp_x10=%LD humidity_x10=%LU\r\n",
          sensor_status,(signed int32)temperature_x10,(unsigned int32)humidity_x10);
+   }
+   if(sensor_status==DHT22_OK && (unsigned int32)(now-sample_ms)>15000)
+   {
+      sensor_status=DHT22_PENDING;
+      demo_display_update();
    }
    if((unsigned int32)(now-sample_ms)>=5000 && !dht22_busy() &&
       !pending && !join_wait && !tx_wait)
@@ -128,6 +207,7 @@ void app_task_10ms(unsigned int8 inputs_raw)
       sample_ms=now;
       dht22_start();
    }
+   demo_display_task();
 }
 void app_task_100ms(void)
 {
