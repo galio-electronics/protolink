@@ -1,0 +1,26 @@
+#ifndef STATION_RTC_SD_CONFIG_H
+#define STATION_RTC_SD_CONFIG_H
+#define APP_NAME "station-rtc-sd"
+#define FW_VERSION "0.1.0"
+#define PROTOLINK_DEFAULT 1
+#define STATION_DEBUG_ENABLED 1
+#define STATION_DEBUG_UART 1
+#define STATION_DEBUG_BAUD 115200
+#define STATION_PASS_STRINGS_IN_RAM 1
+#define APP_STATUS_INTERVAL_MS 30000
+#define APP_FAST_TASK 1
+#define APP_DIAGNOSTICS_COMMAND demo_command
+#define SD_RUN_HZ 1000000
+#define RTC_HAS_BATTERY 1
+#define LOGGER_ENABLE 1
+#define LOGGER_TELEMETRY_ENABLE 1
+#define LOGGER_EVENTS_ENABLE 1
+#define LOGGER_INTERVAL_SEC 60
+#define LOGGER_RETRY_MS 10000UL
+#define LOGGER_QUEUE_SIZE 2
+#define LOGGER_RECORD_MAX 128
+#define LOGGER_LEVEL 1
+#define LOGGER_DEVICE_ID "STATION01"
+#define LOGGER_SIGNAL_NAME "DI_RAW"
+/* Every record commits data+metadata and closes. No delayed flush window. */
+#endif

@@ -6,6 +6,10 @@
   "ccs_root": "C:/Program Files (x86)/PICC",
   "library_root": "G:/Proyectos/PIC",
   "profiles": {
+    "station-rtc-sd": {
+      "source": "firmware/apps/station-rtc-sd/main.c",
+      "description": "Demo MCP79402 I2C1 + microSD SPI2 + FAT32 y CSV"
+    },
     "station-master": {
       "source": "firmware/station/main.c",
       "description": "Firmware maestro Station"

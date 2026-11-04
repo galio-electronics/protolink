@@ -37,6 +37,15 @@
         "common/lte_at.c": "ee156c2a79d71d0bc1048b3a10f6804cfd7273a365c54ddfc0506134fba1d439",
         "simcom/a7670.c": "72b578951599ef5a0913d57de97f225b6f6f1b6d594985cd1c6d99dd57ad6060"
       }
+    },
+    "sd-card": {
+      "path": "../sd-card",
+      "sha256": {
+        "fat32.c": "01b78b366be0952d43f828a54be32b43220c5296c74c40562f3f4a7e57d7d889",
+        "fat32.h": "11de81b267c89ad2816a4cd84d9226d9df08a466ec9caac33175a46473c12b7d",
+        "sd_card.c": "f82b4bd99306714b80aac4a4789ffbfed1ce48123f027971e8954d5bd0c0d2df",
+        "sd_card.h": "002c3a9a0990213abbb547810855348d6e8d529bb4eb191b36f546f542cbcd66"
+      }
     }
   }
 }

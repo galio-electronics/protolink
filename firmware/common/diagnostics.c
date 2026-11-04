@@ -100,6 +100,9 @@ void diagnostics_task(unsigned int8 inputs_raw)
          if(!strcmp(command,"info")) diagnostics_info();
          else if(!strcmp(command,"status") || !strcmp(command,"inputs") || !strcmp(command,"errors"))
             diagnostics_status(inputs_raw);
+#ifdef APP_DIAGNOSTICS_COMMAND
+         else if(APP_DIAGNOSTICS_COMMAND(command)) { }
+#endif
          else
             printf(diagnostics_putc,"HELP info status inputs errors\r\n");
       }

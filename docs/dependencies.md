@@ -15,6 +15,7 @@ y estado de pruebas fisicas.
 
 | Dependencia | Inclusión actual | Observaciones de integración |
 | --- | --- | --- |
+| sd-card | `<sd-card/sd_card.c>` y `<sd-card/fat32.c>` | Solo `station-rtc-sd`; SPI2 dedicado, buffer único de 512 bytes, FAT32 acotada para demo |
 | CCS 5.081 | `<18F67K40.h>`, `<bootloader.h>`, etc. | Instalación externa licenciada; no editarla/copiarla sin necesidad |
 | simple_master | `<simple_master/simple_master.c>` | `.c` incluye `.h`; default UART1, cambiar explícitamente; hay esperas bloqueantes y `smodbus_rx_flush` refiere INT_RDA4 directamente |
 | rui3_at | `<rui3_at/rui3_at.h>` | `.h` incluye `.c`; no incluir ambos; default UART1, buffers grandes y llamadas con espera; revisar selección de UART y tamaño de índices |

@@ -145,3 +145,7 @@ Demo RAK3172 UART5 + OTAA ChirpStack US915 canales 0-7:
 
 Demo Qidian QDY30A por RS485 + JSON Ethernet para ThingsBoard:
 [workspace e instrucciones](firmware/apps/station-qdy30a/README.md).
+## Demo RTC y microSD
+
+Disponible el perfil `station-rtc-sd`: [guía de prueba](firmware/apps/station-rtc-sd/README.md).
+Sus drivers SD/FAT32 están en el repositorio hermano `../sd-card`.

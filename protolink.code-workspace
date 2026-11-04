@@ -1,5 +1,6 @@
 {
   "folders": [
+    {"name": "Galio sd-card", "path": "../sd-card"},
     {"name": "Protolink Firmware", "path": "."},
     {"name": "Galio simple_master", "path": "../simple_master"},
     {"name": "Galio rui3_at", "path": "../rui3_at"},
