@@ -37,6 +37,10 @@
     "station-qdy30a-lte": {
       "source": "firmware/apps/station-qdy30a-lte/main.c",
       "description": "QDY30A RS485 UART4 + SIMCom A7670 UART5 MQTT celular"
+    },
+    "station-hw-test": {
+      "source": "firmware/apps/station-hw-test/main.c",
+      "description": "Prueba fisica EEPROM + ADS1115 AIN0/AIN1 + RTC, consola descriptiva"
     }
   }
 }

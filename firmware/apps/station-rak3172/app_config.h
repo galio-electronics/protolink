@@ -16,4 +16,7 @@
 #define RUI3_AT_DEBUG 0
 #define DEMO_INTERVAL_MS 60000UL
 #include "credentials.local.h"
+#define APP_EVENT_MANAGER 1
+#define EVENT_STORAGE_ENABLED 1
+#define EVENT_MODULE_MASK 0x000D
 #endif

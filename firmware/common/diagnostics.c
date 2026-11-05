@@ -80,6 +80,9 @@ void diagnostics_status(unsigned int8 inputs_raw)
           (unsigned int32)rx_dropped);
 }
 
+#ifdef APP_EVENT_MANAGER
+#include "event_diagnostics.c"
+#endif
 void diagnostics_task(unsigned int8 inputs_raw)
 {
    static char command[24];
@@ -97,6 +100,10 @@ void diagnostics_task(unsigned int8 inputs_raw)
       else if(length)
       {
          command[length] = 0;
+#ifdef APP_EVENT_MANAGER
+         if(event_diagnostics_command(command)) { }
+         else
+#endif
          if(!strcmp(command,"info")) diagnostics_info();
          else if(!strcmp(command,"status") || !strcmp(command,"inputs") || !strcmp(command,"errors"))
             diagnostics_status(inputs_raw);

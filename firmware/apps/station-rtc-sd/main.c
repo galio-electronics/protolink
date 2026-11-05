@@ -2,10 +2,23 @@
 #include "../../../station.h"
 #include <string.h>
 #include "../../common/diagnostics.h"
+#include "../../common/event_station.c"
+#include "../../common/event_health.c"
 #include "rtc_port.c"
+#include "../../common/mcp79402.h"
+#include "../../common/event_rtc.c"
 #include "../../common/mcp79402.c"
 #include "sd_port.c"
+#define sd_init event_sd_driver_init
+#define sd_read_sector event_sd_driver_read
+#define sd_write_sector event_sd_driver_write
+#define sd_sync event_sd_driver_sync
 #include <sd-card/sd_card.c>
+#undef sd_init
+#undef sd_read_sector
+#undef sd_write_sector
+#undef sd_sync
+#include "../../common/event_sd.c"
 #include <sd-card/fat32.c>
 #include "../../common/station_logger.c"
 

@@ -9,11 +9,17 @@ void main(void)
    unsigned int32 now, last_inputs=0, last_led=0, last_100ms=0;
    unsigned int32 last_1000ms=0, last_status=0;
    int1 led_on=FALSE;
+#ifdef APP_EVENT_MANAGER
+   event_station_capture();
+#endif
    disable_interrupts(GLOBAL);
    protolink_io_init();
    station_state.inputs_raw = protolink_read_inputs();
    protolink_timer2_init();
    diagnostics_init();
+#ifdef APP_EVENT_MANAGER
+   event_station_init();
+#endif
    enable_interrupts(GLOBAL);
    diagnostics_info();
    app_init();
@@ -23,6 +29,10 @@ void main(void)
       app_task(); // Avance breve de drivers cooperativos que requieren sub-ms.
 #endif
       now = protolink_millis();
+#ifdef APP_EVENT_MANAGER
+      event_manager_task();
+      event_diagnostics_task();
+#endif
       diagnostics_task(station_state.inputs_raw);
       if((unsigned int32)(now-last_inputs) >= 10)
       {

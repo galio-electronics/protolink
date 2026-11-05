@@ -4,6 +4,7 @@
 #include <string.h>
 #include "../common/diagnostics.h"
 #include "../common/library_config.h"
+#include "../common/event_station.c"
 
 void app_init(void)
 {

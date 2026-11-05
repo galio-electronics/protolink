@@ -39,7 +39,7 @@ int1 rtc_init(void)
    }
    return TRUE;
 }
-int1 rtc_get_datetime(rtc_datetime_t *dt)
+static int1 rtc_get_datetime_raw(rtc_datetime_t *dt)
 {
    unsigned int8 r[7], sec, attempt;
    rtc_error = RTC_OK;
@@ -62,6 +62,14 @@ int1 rtc_get_datetime(rtc_datetime_t *dt)
    /* Conservative: operator must inspect/acknowledge a power interruption. */
    if(r[3]&0x10) { rtc_error=RTC_POWER_FAIL; return FALSE; }
    return TRUE;
+}
+int1 rtc_get_datetime(rtc_datetime_t *dt)
+{
+   int1 ok=rtc_get_datetime_raw(dt);
+#ifdef APP_EVENT_RTC
+   event_health_rtc(ok,dt);
+#endif
+   return ok;
 }
 int1 rtc_is_valid(void) { rtc_datetime_t dt; return rtc_get_datetime(&dt); }
 int1 rtc_get_power_fail_status(void)
@@ -126,7 +134,12 @@ int1 rtc_set_datetime(rtc_datetime_t *dt)
    for(attempts=0;attempts<1000;attempts++) {
       delay_ms(2);
       if(!rtc_read(3,&weekday,1)) return FALSE;
-      if(weekday & 0x20) return TRUE;
+      if(weekday & 0x20) {
+#ifdef APP_EVENT_RTC
+         event_rtc_synced=TRUE;
+#endif
+         return TRUE;
+      }
    }
    rtc_error=RTC_STOPPED; return FALSE;
 }

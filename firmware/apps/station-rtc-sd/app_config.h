@@ -23,4 +23,8 @@
 #define LOGGER_DEVICE_ID "STATION01"
 #define LOGGER_SIGNAL_NAME "DI_RAW"
 /* Every record commits data+metadata and closes. No delayed flush window. */
+#define APP_EVENT_MANAGER 1
+#define EVENT_STORAGE_ENABLED 1
+#define EVENT_MODULE_MASK 0x0017
+#define APP_EVENT_RTC 1
 #endif

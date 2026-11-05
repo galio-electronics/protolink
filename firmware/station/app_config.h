@@ -10,4 +10,7 @@
 // UART1 pertenece a diagnostico. Activar otras librerias solo tras validar
 // sus recursos y cableado: ver docs/dependencies.md y library_config.h.
 #define STATION_PASS_STRINGS_IN_RAM 1
+#define APP_EVENT_MANAGER 1
+#define EVENT_STORAGE_ENABLED 1
+#define EVENT_MODULE_MASK 0x0005
 #endif

@@ -2,12 +2,10 @@
 #include "../../../station.h"
 #include <string.h>
 #include "../../common/diagnostics.h"
+#include "../../common/event_station.c"
+#include "../../common/event_health.c"
 #pin_select U5TX=TX_5
 #pin_select U5RX=RX_5
-#pin_select SCL1IN=PIN_SCL
-#pin_select SDA1IN=PIN_SDA
-#pin_select SCL1OUT=PIN_SCL
-#pin_select SDA1OUT=PIN_SDA
 #use i2c(Master,I2C1,FAST=400000,STREAM=OLED_I2C)
 #define OLED_I2C_STREAM OLED_I2C
 #include "../../common/library_config.h"
@@ -116,6 +114,7 @@ void demo_line(void)
       printf(diagnostics_putc,"LORA %s\r\n",response);
    else if(!strcmp(response,"OK") && pending)
    {
+      event_health_lora(TRUE,0);
       pending=FALSE;
       if(step==0)
          printf(diagnostics_putc,"INFO RAK_DETECTADO UART5: AT OK\r\n");
@@ -221,6 +220,7 @@ void app_task_100ms(void)
    {
       if((unsigned int32)(now-command_ms)>3000)
       {
+         event_health_lora(FALSE,1);
          pending=FALSE; join_wait=FALSE; tx_wait=FALSE;
          response_len=0; overflow=FALSE;
          next_ms=now+DEMO_INTERVAL_MS;

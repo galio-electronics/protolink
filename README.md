@@ -149,3 +149,9 @@ Demo Qidian QDY30A por RS485 + JSON Ethernet para ThingsBoard:
 
 Disponible el perfil `station-rtc-sd`: [guía de prueba](firmware/apps/station-rtc-sd/README.md).
 Sus drivers SD/FAT32 están en el repositorio hermano `../sd-card`.
+
+Hardware Event Manager común en EEPROM: [integración, formato, comandos,
+pruebas y límites](docs/event-manager.md). Activo en Station master, RTC/SD,
+RAK3172 y QDY30A; configuración Monitor disponible para la biblioteca.
+
+Prueba f�sica EEPROM + ADS1115 AIN0/AIN1 y RDY: [perfil station-hw-test y resultados](firmware/apps/station-hw-test/README.md).

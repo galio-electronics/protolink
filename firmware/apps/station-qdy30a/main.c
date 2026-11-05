@@ -2,6 +2,8 @@
 #include "../../../station.h"
 #include <string.h>
 #include "../../common/diagnostics.h"
+#include "../../common/event_station.c"
+#include "../../common/event_health.c"
 #pin_select U4TX=TX_4
 #pin_select U4RX=RX_4
 #byte qdy_tx4sta=getenv("SFR:TX4STA")
@@ -71,6 +73,7 @@ void app_task_100ms(void)
    status=smodbus_read_holding(QDY_ADDRESS,0,7,registers);
    error=status;
    if(status==SMODBUS_OK && (registers[0]!=QDY_ADDRESS || registers[3]>3)) error=5;
+   event_health_rs485(0,QDY_ADDRESS,error==0,error);
    rs485_led_on=(error==0);
    rs485_led_started=protolink_millis();
    output_bit(RS485_STATUS,rs485_led_on==RS485_STATUS_ACTIVE_HIGH);
