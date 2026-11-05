@@ -97,3 +97,46 @@ El script de diagnóstico conserva sus tiempos conservadores configurables.
 
 La consola informa líneas HEX originales, registros normalizados, bytes serie y
 tiempos de transferencia/entrada+carga. Ver los resultados en `validation.md`.
+
+## Galio Flash Tool (C#): integración de campo
+
+La aplicación Windows incorpora el perfil Station/Monitor BOOT:1.2 y la secuencia
+optimizada 50/200/200 ms, con 1050 ms desde el banner completo. Cada pulsación de
+Cargar valida el HEX antes de abrir el puerto y ejecuta de nuevo autoboot.
+La carga mantiene el mismo puerto hasta comprobar el arranque y después lo libera.
+
+Se portaron la protección de memoria/fuses, el empaquetado de hasta 26 bytes sin
+cruzar filas de 128 bytes y las confirmaciones XOFF/ACK/XON más el ACK/XON final.
+El resultado distingue carga aceptada de inicio de aplicación observado; no hay
+verificación por lectura de flash. Los registros se guardan en
+`%LOCALAPPDATA%\Galio\FlashTool\logs`, incluyendo SHA-256 del archivo.
+
+La implementación C# pasó compilación Release y 23 comprobaciones automatizadas
+con transporte simulado, además de una comprobación de construcción y render de
+la interfaz. **Pendiente validar una carga física desde Galio Flash Tool**; las
+mediciones anteriores de este documento corresponden al cargador Python.
+
+### Validación física de Galio Flash Tool — 2 de noviembre de 2026, 23:17
+
+Se completaron dos cargas consecutivas desde la interfaz Windows en COM26 con
+`build/station-dht22/main.hex` (SHA-256
+`BE9CD47070FDBC3C84221E18CA924831A968E2DCB2371EB4E8A944BA159677BD`).
+8034 bytes de aplicación, 12 bytes de fuses excluidos, 317 registros. Ambas
+recibieron el banner BOOT:1.2, las confirmaciones completas y el arranque
+`INFO app=station-dht22 fw=0.1.0 ... reset=0x0333`.
+Aproximadamente 5.0 s hasta aceptación y 6.0 s hasta identificación de aplicación.
+
+La primera implementación C# con DtrEnable/RtsEnable no entró al loader: arrancaba
+la aplicación, y se detenía antes de enviar HEX. Se contrastó con autoboot_probe
+(sin escribir flash), que sí funcionó con 50/200/200 ms. Se sustituyó el transporte
+de carga por un handle Win32 propio y EscapeCommFunction para las líneas, evitando
+la reconfiguración SetCommState de las propiedades de SerialPort en cada cambio.
+No se alteraron los tiempos ni el protocolo. Las dos cargas correctas corresponden
+a esta versión nativa; esto resuelve la validación física pendiente de carga normal.
+
+Logs locales de Galio en `%LOCALAPPDATA%\Galio\FlashTool\logs`:
+- `20261102-231703-133-9fb3b6d254bf4cacacd258d919719ccf.log`
+- `20261102-231730-045-43bc2f6ceda54148bebfd1a1920e9abd.log`
+
+COM26 quedó liberado al terminar; la placa ejecuta station-dht22 0.1.0. No se midieron
+señales con osciloscopio ni se comprobó funcionalmente el sensor en esta prueba.
