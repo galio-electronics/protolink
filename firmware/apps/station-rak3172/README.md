@@ -33,8 +33,38 @@ conservar ambos. El HEX/listado tambien contienen la clave y viven en `build/`,
 excluido de Git. La consola no imprime las claves. No se generan claves de sesion
 ABP: se derivan durante OTAA. El DevEUI identifica el modulo; no es una clave.
 
-En un clon nuevo ejecutar `python tools/rak3172_credentials.py` desde la raiz
-antes de compilar. El generador no sobrescribe credenciales existentes.
+### Credenciales despues de clonar
+
+En un clon nuevo ejecutar desde la raiz, antes de compilar:
+
+```powershell
+python tools/rak3172_credentials.py
+```
+
+El generador crea `credentials.local.h` y `registration.local.json` con valores
+aleatorios coincidentes; no sobrescribe credenciales existentes.
+
+Para configurar manualmente llaves existentes, se incluyen las plantillas
+`credentials.example.h` y `registration.example.json`. Desde esta carpeta:
+
+```powershell
+Copy-Item credentials.example.h credentials.local.h
+Copy-Item registration.example.json registration.local.json
+```
+
+Usar estas copias solo si los archivos locales aun no existen. Reemplazar los
+valores ficticios en ambos archivos: `DEMO_JOIN_EUI` / `join_eui` debe contener
+16 caracteres hexadecimales y `DEMO_APP_KEY` / `app_key`, 32, sin espacios ni
+prefijo `0x`. No usar la clave de ceros del ejemplo en un dispositivo real.
+
+En `registration.local.json`, sustituir `READ_FROM_LORA_QUERY_2` por el DevEUI
+de 16 caracteres que muestra el modulo en `LORA query=2 AT+DEVEUI=...`.
+Este JSON es una ficha para copiar los valores a los campos de ChirpStack
+descritos arriba; no es un cuerpo de importacion de su API. Para el codec de
+ChirpStack pegar el contenido de `codec.js`, no este JSON.
+
+Versionar solo los archivos `.example.*`; los `.local.*` contienen las llaves
+reales y permanecen excluidos de Git.
 
 ### Cambio de modulo RAK
 

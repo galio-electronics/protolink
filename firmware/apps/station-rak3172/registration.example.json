@@ -1,0 +1,10 @@
+{
+  "name": "station-rak3172",
+  "dev_eui": "READ_FROM_LORA_QUERY_2",
+  "join_eui": "0200000000000000",
+  "app_key": "00000000000000000000000000000000",
+  "activation": "OTAA",
+  "region": "US915",
+  "channels": "0-7",
+  "mask": "0001"
+}
