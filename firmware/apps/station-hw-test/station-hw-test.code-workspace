@@ -10,7 +10,7 @@
     },
     {
       "name": "Galio analog_drivers",
-      "path": "../../../../analog_drivers"
+      "path": "../../../galio/analog_drivers"
     }
   ],
   "tasks": {
@@ -158,6 +158,34 @@
         "options": {
           "cwd": "${workspaceFolder:Station HW Test}/../../.."
         }
+      },
+      {
+        "label": "Protolink: Preparar dependencias",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:Station HW Test}/../../../tools/run.ps1",
+          "deps-sync",
+          "--profile",
+          "station-hw-test"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "focus": true,
+          "clear": true
+        },
+        "runOptions": {
+          "instanceLimit": 1
+        },
+        "options": {
+          "cwd": "${workspaceFolder:Station HW Test}/../../.."
+        }
       }
     ]
   },
@@ -166,7 +194,7 @@
     "C_Cpp.errorSquiggles": "disabled",
     "C_Cpp.default.includePath": [
       "${workspaceFolder:Station HW Test}/../../../**",
-      "${workspaceFolder:Station HW Test}/../../../..",
+      "${workspaceFolder:Station HW Test}/../../../galio",
       "C:/Program Files (x86)/PICC/Devices",
       "C:/Program Files (x86)/PICC/Drivers"
     ]

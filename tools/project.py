@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import dependencies
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG = ROOT / 'config/project.json'
@@ -15,7 +16,7 @@ def load_config(path=DEFAULT_CONFIG, profile=None, port=None):
     local = ROOT / 'config/local.json'
     if local.exists():
         overrides = json.loads(local.read_text(encoding='utf-8-sig'))
-        for key in ('compiler', 'ccs_root', 'library_root', 'port'):
+        for key in ('compiler', 'ccs_root', 'port'):
             if key in overrides:
                 config[key] = overrides[key]
     chosen = profile or config['active_profile']
@@ -27,27 +28,18 @@ def load_config(path=DEFAULT_CONFIG, profile=None, port=None):
     config.update(profile=chosen, source=source, output_dir=ROOT/'build'/chosen)
     config['hex_path'] = config['output_dir'] / (source.stem + '.hex')
     config['config_path'] = path
+    config['library_root'] = ROOT/'galio'
     if port:
         config['port'] = port
     return config
 
 
-def dependency_status(config):
-    lock = json.loads((ROOT/'config/dependencies.lock.json').read_text(encoding='utf-8'))
-    result = {}
-    for name, entry in lock['libraries'].items():
-        issues = []
-        for file, expected in entry['sha256'].items():
-            path = Path(config['library_root'])/name/file
-            if not path.exists():
-                issues.append(f'ausente: {file}')
-            elif hashlib.sha256(path.read_bytes()).hexdigest() != expected:
-                issues.append(f'modificado: {file}')
-        result[name] = issues
-    return result
+def dependency_status(config, all_libraries=False):
+    return dependencies.status(ROOT, config['profile'], all_libraries)
 
 
 def compile_project(config):
+    dependencies.ensure(ROOT, config['profile'])
     source, directory = config['source'], config['output_dir']
     directory.mkdir(parents=True, exist_ok=True)
     output = config['hex_path']

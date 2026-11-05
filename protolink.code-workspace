@@ -1,13 +1,39 @@
 {
   "folders": [
-    {"name": "Galio analog_drivers", "path": "../analog_drivers"},
-    {"name": "Galio sd-card", "path": "../sd-card"},
-    {"name": "Protolink Firmware", "path": "."},
-    {"name": "Galio simple_master", "path": "../simple_master"},
-    {"name": "Galio rui3_at", "path": "../rui3_at"},
-    {"name": "Galio lcd_i2c", "path": "../lcd_i2c"},
-    {"name": "Galio oled_i2c", "path": "../oled_i2c"},
-    {"name": "Station MPLAB (ICSP / legacy)", "path": "C:/Users/artga/MPLABXProjects/ProtoLink-Station.X"}
+    {
+      "name": "Protolink Firmware",
+      "path": "."
+    },
+    {
+      "name": "Galio simple_master",
+      "path": "galio/simple_master"
+    },
+    {
+      "name": "Galio rui3_at",
+      "path": "galio/rui3_at"
+    },
+    {
+      "name": "Galio lcd_i2c",
+      "path": "galio/lcd_i2c"
+    },
+    {
+      "name": "Galio oled_i2c",
+      "path": "galio/oled_i2c"
+    },
+    {
+      "name": "Galio lte-module",
+      "path": "galio/lte-module"
+    },
+    {
+      "name": "Galio sd-card",
+      "path": "galio/sd-card"
+    },
+    {
+      "name": "Galio analog_drivers",
+      "path": "galio/analog_drivers"
+    }
   ],
-  "settings": {"files.autoSave": "afterDelay"}
+  "settings": {
+    "files.autoSave": "afterDelay"
+  }
 }

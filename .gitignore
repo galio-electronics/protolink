@@ -14,3 +14,6 @@
 
 # Configuracion privada de LTE / MQTT
 /firmware/apps/station-qdy30a-lte/lte_config.local.h
+
+# Repositorios de dependencias descargados por tools/dependencies.py
+/galio/

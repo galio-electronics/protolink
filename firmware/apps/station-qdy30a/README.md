@@ -84,7 +84,7 @@ El parche reproducible esta en `docs/patches/simple-master-station-rs485.patch`.
 En una copia limpia de la version original de simple_master, aplicarlo desde
 ese repositorio con `git apply ../protolink/docs/patches/simple-master-station-rs485.patch`.
 No reaplicarlo sobre esta instalacion: ya esta corregida.
-Las nuevas huellas estan registradas en `config/dependencies.lock.json`.
+Las nuevas huellas estan registradas en `config/dependencies.json`.
 
 La API Modbus es bloqueante hasta aproximadamente 300 ms mas el envio. Durante
 la espera las interrupciones de consola, Ethernet y Timer2 siguen activas, pero

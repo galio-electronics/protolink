@@ -1,11 +1,13 @@
 # Dependencias y propiedad de recursos
 
-Las carpetas externas son dependencias fuente compartidas. No se movieron ni
-modificaron. `config/dependencies.lock.json` registra SHA256 de sus `.c/.h`
-(excluyendo ejemplos), porque no se depende de que cada carpeta tenga metadata Git.
-`Station: Verificar dependencias` detecta ausencias o diferencias. El build anota
-esas diferencias pero no bloquea trabajo deliberado sobre una librería.
-Para adoptar cambios, revisar, probar y actualizar las huellas intencionalmente.
+Las dependencias Git se descargan automaticamente dentro de `galio/` antes de
+compilar. El manifiesto `config/dependencies.json` contiene URLs, commits,
+huellas SHA256 y la lista por aplicacion. Los repositorios originales hermanos
+no se modifican ni se requieren para los builds nuevos.
+
+Ver [preparacion en otra computadora y actualizaciones](dependency-setup.md).
+`dependencies` inspecciona; `deps-sync` descarga lo ausente. Si una copia tiene
+cambios locales o no coincide con el manifiesto, el build se detiene sin tocarla.
 
 Excepcion incorporada con `station-qdy30a`: `simple_master` ahora permite 8N1,
 espera fin de TX antes de liberar DE y limita la recepcion completa por timeout.
@@ -15,7 +17,7 @@ y estado de pruebas fisicas.
 
 | Dependencia | Inclusión actual | Observaciones de integración |
 | --- | --- | --- |
-| analog_drivers | `<analog_drivers/ads1115.h>` | Repositorio hermano `../analog_drivers`; `station-hw-test` reutiliza las definiciones ADS1115 y usa el puerto I2C acotado. No llama al bucle sin timeout de `ads1115.c`. |
+| analog_drivers | `<analog_drivers/ads1115.h>` | Repositorio descargado en `galio/analog_drivers`; `station-hw-test` reutiliza las definiciones ADS1115 y usa el puerto I2C acotado. No llama al bucle sin timeout de `ads1115.c`. |
 | sd-card | `<sd-card/sd_card.c>` y `<sd-card/fat32.c>` | Solo `station-rtc-sd`; SPI2 dedicado, buffer único de 512 bytes, FAT32 acotada para demo |
 | CCS 5.081 | `<18F67K40.h>`, `<bootloader.h>`, etc. | Instalación externa licenciada; no editarla/copiarla sin necesidad |
 | simple_master | `<simple_master/simple_master.c>` | `.c` incluye `.h`; default UART1, cambiar explícitamente; hay esperas bloqueantes y `smodbus_rx_flush` refiere INT_RDA4 directamente |
@@ -44,7 +46,7 @@ las cuatro librerías pueden ejecutarse juntas sin adaptar recursos. Debe valida
 cada incorporación y el presupuesto RAM del PIC. Se preservaron los fuentes
 externos y no se declara validación funcional de LoRa, Modbus, LCD u OLED.
 
-Para nuevas librerías compartidas, usar carpeta/repositorio hermano con `.h`, `.c`,
+Para nuevas librerías compartidas, usar un repositorio Git declarado en el manifiesto con `.h`, `.c`,
 README y ejemplos. Agregar al workspace, rutas de inclusión y manifiesto. Para una
 función exclusiva de cliente usar un módulo dentro de su aplicación.
 

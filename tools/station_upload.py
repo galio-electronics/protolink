@@ -6,6 +6,7 @@ from pathlib import Path
 import subprocess
 import sys
 import time
+import dependencies
 from autoboot_probe import crossed_sequence
 from project import ROOT, DEFAULT_CONFIG, load_config, compile_project, dependency_status
 from serial_monitor import monitor, open_serial
@@ -148,13 +149,16 @@ def upload(config, lines, monitor_seconds=5, commands=()):
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('action', choices=['build', 'check', 'upload', 'build-upload',
-                                      'build-upload-monitor', 'monitor', 'select', 'select-port', 'profiles', 'dependencies', 'tests'])
+                                      'build-upload-monitor', 'monitor', 'select', 'select-port', 'profiles', 'dependencies', 'deps-sync', 'tests'])
     ap.add_argument('--config', type=Path, default=DEFAULT_CONFIG)
     ap.add_argument('--profile')
     ap.add_argument('--port')
+    ap.add_argument('--all', action='store_true', help='Todas las librerias (dependencies/deps-sync)')
     ap.add_argument('--seconds', type=float, default=None, help='0=monitor continuo')
     ap.add_argument('--command', action='append', default=[], choices=['info','status','inputs','errors'])
     args = ap.parse_args()
+    if args.all and args.action not in ('dependencies', 'deps-sync'):
+        ap.error('--all solo aplica a dependencies y deps-sync')
     if args.seconds is not None and args.seconds < 0:
         ap.error('--seconds debe ser >= 0')
     config = load_config(args.config, args.profile, None if args.action == 'select-port' else args.port)
@@ -179,8 +183,11 @@ def main():
         args.config.write_text(json.dumps(saved, indent=2)+'\n', encoding='utf-8')
         print(f"Perfil activo: {args.profile}\nFuente: {config['source']}")
         return 0
+    if args.action == 'deps-sync':
+        dependencies.ensure(ROOT, config['profile'], args.all)
+        return 0
     if args.action == 'dependencies':
-        states = dependency_status(config)
+        states = dependency_status(config, args.all)
         for name, issues in states.items():
             print(name + ': ' + ('; '.join(issues) if issues else 'OK (huellas coinciden)'))
         return int(any(states.values()))

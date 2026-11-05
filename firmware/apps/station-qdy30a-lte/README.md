@@ -29,7 +29,7 @@ Los valores de ejemplo no son un servidor operativo. Para ThingsBoard,
 usuario = token del dispositivo, password vacio y topic v1/devices/me/telemetry.
 Esta version usa MQTT TCP sin TLS y APN sin autenticacion PAP/CHAP.
 
-Dependencia hermana: `G:/Proyectos/PIC/lte-module` con common/ y simcom/.
+Dependencia descargada automaticamente: `galio/lte-module` con common/ y simcom/.
 Abrir `station-qdy30a-lte.code-workspace` o desde la raiz de protolink:
 
 ```powershell

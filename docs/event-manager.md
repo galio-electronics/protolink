@@ -12,7 +12,7 @@ y el ejecutor `station_app.c`. Timer2 genera 1 ms; UART1 y sus ISR pertenecen
 a diagnóstico. Las aplicaciones inicializan sus periféricos desde `app_init`.
 RAK usa UART5 y parser cooperativo sobre `rui3_at`; QDY30A usa UART4 y
 `simple_master`, con transacciones bloqueantes existentes. RTC usa MSSP1,
-microSD usa MSSP2 y los drivers externos `../sd-card`. No se altera el
+microSD usa MSSP2 y los drivers externos `galio/sd-card`. No se altera el
 bootloader, watchdog, pinout ni proyecto MPLAB hello-world.
 
 No existe aplicación ni encabezado específico Monitor en este repositorio.
@@ -39,7 +39,7 @@ comparte las mismas asignaciones PPS; se eliminaron sus declaraciones
 duplicadas. El puerto común configura 100 kHz. RG7 continúa siendo RTC_MFP;
 no se usa el antiguo EE_WP de V2. No se agregaron sondas periódicas a otros
 periféricos. La supervisión de alimentación está deshabilitada: no hay divisor
-ni límites verificados. El ADS1115 externo de `../analog_drivers` entrega
+ni límites verificados. El ADS1115 externo de `galio/analog_drivers` entrega
 datos sin propagar ACK/error de lectura; se ofrece `event_health_adc`, pero
 no se activa ni se presenta esa lectura como comprobación de salud.
 

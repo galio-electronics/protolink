@@ -4,7 +4,6 @@
   "baud": 115200,
   "compiler": "C:/Program Files (x86)/PICC/CCSCON.exe",
   "ccs_root": "C:/Program Files (x86)/PICC",
-  "library_root": "G:/Proyectos/PIC",
   "profiles": {
     "station-rtc-sd": {
       "source": "firmware/apps/station-rtc-sd/main.c",

@@ -11,7 +11,7 @@ activo del workspace principal o del archivo abierto.
 - **HW Test: Monitor serie**: abre la consola sin cargar firmware.
 - **Protolink: Seleccionar puerto COM**: seleccion compartida con las otras apps.
 
-El workspace incluye el demo, los modulos comunes y `../analog_drivers`.
+El workspace incluye el demo, los modulos comunes y `galio/analog_drivers`.
 Cerrar el monitor con Ctrl+C antes de cargar o abrir otra sesion del puerto.
 
 Perfil `station-hw-test`, CCS 5.081. Consola USB UART1 a 115200.
@@ -19,7 +19,7 @@ Usa el puerto I2C1 comprobado; direccion ADS1115 0x49 (ADDR a VDD),
 AIN0/AIN1 single-ended, PGA +/-6.144 V, 128 SPS, conversion single-shot
 con timeout de 100 ms. Valores crudos, sin calibracion ni conversion a mA.
 RDY se configura como conversion-ready y se observa RA3 como entrada.
-Se reutilizan las definiciones del ADS existente en `../analog_drivers`;
+Se reutilizan las definiciones del ADS existente en `galio/analog_drivers`;
 no se usa su bucle de conversion sin timeout.
 
 Comandos: `info`, `status`, `LOG STATUS`, `LOG COUNT`, `LOG READ 0`,

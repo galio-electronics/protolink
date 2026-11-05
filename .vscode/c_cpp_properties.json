@@ -5,9 +5,9 @@
       "compilerPath": "",
       "includePath": [
         "${workspaceFolder}/**",
+        "${workspaceFolder}/galio",
         "C:/Program Files (x86)/PICC/Devices",
-        "C:/Program Files (x86)/PICC/Drivers",
-        "G:/Proyectos/PIC"
+        "C:/Program Files (x86)/PICC/Drivers"
       ],
       "defines": [
         "__ISNT_CCS__",
@@ -18,11 +18,7 @@
       "browse": {
         "path": [
           "${workspaceFolder}",
-          "G:/Proyectos/PIC/simple_master",
-          "G:/Proyectos/PIC/analog_drivers",
-          "G:/Proyectos/PIC/rui3_at",
-          "G:/Proyectos/PIC/lcd_i2c",
-          "G:/Proyectos/PIC/oled_i2c",
+          "${workspaceFolder}/galio",
           "C:/Program Files (x86)/PICC/Devices",
           "C:/Program Files (x86)/PICC/Drivers"
         ],

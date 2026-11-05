@@ -55,9 +55,10 @@ logs/                          Capturas serie con fecha y hora (generadas)
 .venv/                         Entorno Python local (generado)
 ```
 
-Las librerías propias permanecen en `../simple_master`, `../rui3_at`,
-`../lcd_i2c` y `../oled_i2c`, visibles en el workspace. Los drivers CCS se usan
- desde la instalación original. [Integración y recursos](docs/dependencies.md).
+Las librerias se descargan automaticamente en `galio/` dentro del proyecto,
+segun el perfil que se compile. El [manifiesto](config/dependencies.json) incluye
+los enlaces GitHub y commits fijados por aplicacion. No es necesario clonarlas
+manualmente. [Preparacion en otra computadora](docs/dependency-setup.md).
 
 ## Equipo y configuración
 
@@ -89,7 +90,7 @@ los drivers del CP210x. Ejecutar `tools/setup.ps1`; también se ejecuta automát
 si una tarea no encuentra `.venv`. Requiere acceso a pyserial en pip o su caché.
 
 Editar `config/project.json` para rutas y puerto, o crear `config/local.json`
-(no versionado) con `compiler`, `ccs_root`, `library_root` y/o `port` para ajustes
+(no versionado) con `compiler`, `ccs_root` y/o `port` para ajustes
 locales. Las rutas de navegación/workspace deben actualizarse si se mueven librerías.
 
 El build de VS Code invoca CCS directamente con los argumentos verificados de
@@ -148,7 +149,7 @@ Demo Qidian QDY30A por RS485 + JSON Ethernet para ThingsBoard:
 ## Demo RTC y microSD
 
 Disponible el perfil `station-rtc-sd`: [guía de prueba](firmware/apps/station-rtc-sd/README.md).
-Sus drivers SD/FAT32 están en el repositorio hermano `../sd-card`.
+Sus drivers SD/FAT32 están en el directorio descargado `galio/sd-card`.
 
 Hardware Event Manager común en EEPROM: [integración, formato, comandos,
 pruebas y límites](docs/event-manager.md). Activo en Station master, RTC/SD,

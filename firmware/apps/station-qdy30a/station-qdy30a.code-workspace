@@ -10,19 +10,7 @@
     },
     {
       "name": "Galio simple_master",
-      "path": "../../../../simple_master"
-    },
-    {
-      "name": "Galio rui3_at",
-      "path": "../../../../rui3_at"
-    },
-    {
-      "name": "Galio lcd_i2c",
-      "path": "../../../../lcd_i2c"
-    },
-    {
-      "name": "Galio oled_i2c",
-      "path": "../../../../oled_i2c"
+      "path": "../../../galio/simple_master"
     }
   ],
   "tasks": {
@@ -158,6 +146,31 @@
         "runOptions": {
           "instanceLimit": 1
         }
+      },
+      {
+        "label": "Protolink: Preparar dependencias",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:Station QDY30A}/../../../tools/run.ps1",
+          "deps-sync",
+          "--profile",
+          "station-qdy30a"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "focus": true,
+          "clear": true
+        },
+        "runOptions": {
+          "instanceLimit": 1
+        }
       }
     ]
   },
@@ -166,7 +179,7 @@
     "C_Cpp.errorSquiggles": "disabled",
     "C_Cpp.default.includePath": [
       "${workspaceFolder:Station QDY30A}/../../../**",
-      "G:/Proyectos/PIC",
+      "${workspaceFolder:Station QDY30A}/../../../galio",
       "C:/Program Files (x86)/PICC/Devices",
       "C:/Program Files (x86)/PICC/Drivers"
     ]

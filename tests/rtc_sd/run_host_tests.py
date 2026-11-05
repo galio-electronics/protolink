@@ -11,7 +11,7 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[2]
 parser = argparse.ArgumentParser()
 parser.add_argument('--cc', default='gcc')
-parser.add_argument('--sd-root', type=Path, default=ROOT.parent / 'sd-card')
+parser.add_argument('--sd-root', type=Path, default=ROOT / 'galio' / 'sd-card')
 args = parser.parse_args()
 out = ROOT / 'build' / 'rtc-sd-host'
 out.mkdir(parents=True, exist_ok=True)

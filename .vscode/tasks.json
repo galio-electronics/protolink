@@ -329,6 +329,32 @@
       "options": {
         "cwd": "${workspaceFolder}"
       }
+    },
+    {
+      "label": "Protolink: Preparar dependencias",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}/tools/run.ps1",
+        "deps-sync"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true,
+        "clear": true
+      },
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
     }
   ],
   "inputs": [
@@ -338,12 +364,14 @@
       "description": "Elegir main.c que se compilara",
       "options": [
         "station-master",
-        "station-client",
         "station-blink",
+        "station-client",
         "station-dht22",
         "station-rak3172",
         "station-qdy30a",
-        "station-qdy30a-lte"
+        "station-qdy30a-lte",
+        "station-rtc-sd",
+        "station-hw-test"
       ],
       "default": "station-master"
     }
