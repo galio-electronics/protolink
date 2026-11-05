@@ -10,34 +10,15 @@
 #bit qdy_tx_empty=qdy_tx4sta.1
 #define SMODBUS_WAIT_TX_DONE() while(!qdy_tx_empty) { }
 #include "../../common/library_config.h"
+#define GALIO_SENSORS_CCS 1
+#include <galio-sensors/adapters/modbus_simple_master.h>
+#include <galio-sensors/sensors/qdy30a/qdy30a.c>
 #include "ethernet_json.c"
 
 static unsigned int32 last_poll=0, samples=0, failures=0;
-static unsigned int16 registers[7];
+static qdy30a_sample measurement;
 static int1 rs485_led_on=FALSE;
 static unsigned int32 rs485_led_started;
-
-// Exact fixed-point formatting, including -32768 and negative fractions.
-// Decimal count validated before calling. No float or locale-dependent JSON.
-void qdy_format(signed int16 raw, unsigned int8 decimals, char *text)
-{
-   unsigned int32 magnitude, divisor=1, fraction;
-   unsigned int8 i, pos=0;
-   if(raw<0) { text[pos++]='-'; magnitude=-(signed int32)raw; }
-   else magnitude=raw;
-   for(i=0;i<decimals;i++) divisor*=10;
-   sprintf(text+pos,"%LU",magnitude/divisor);
-   pos=strlen(text);
-   fraction=magnitude%divisor;
-   if(decimals) text[pos++]='.';
-   while(decimals--)
-   {
-      divisor/=10;
-      text[pos++]='0'+(unsigned int8)(fraction/divisor);
-      fraction%=divisor;
-   }
-   text[pos]=0;
-}
 
 void app_init(void)
 {
@@ -64,15 +45,12 @@ void app_task_10ms(unsigned int8 inputs_raw)
 void app_task_100ms(void)
 {
    unsigned int32 now=protolink_millis();
-   smodbus_status_t status;
    unsigned int8 error;
    char value[12], zero[12], full_scale[12];
    if((unsigned int32)(now-last_poll)<QDY_POLL_MS || ethernet_sending) return;
    last_poll=now;
    // FC03 only. Never writes address, baudrate or calibration registers.
-   status=smodbus_read_holding(QDY_ADDRESS,0,7,registers);
-   error=status;
-   if(status==SMODBUS_OK && (registers[0]!=QDY_ADDRESS || registers[3]>3)) error=5;
+   error=qdy30a_read(QDY_ADDRESS,&measurement);
    event_health_rs485(0,QDY_ADDRESS,error==0,error);
    rs485_led_on=(error==0);
    rs485_led_started=protolink_millis();
@@ -87,16 +65,16 @@ void app_task_100ms(void)
    }
    else
    {
-      qdy_format((signed int16)registers[4],registers[3],value);
-      qdy_format((signed int16)registers[5],registers[3],zero);
-      qdy_format((signed int16)registers[6],registers[3],full_scale);
+      qdy30a_format(measurement.raw,measurement.decimals,value);
+      qdy30a_format(measurement.range_min,measurement.decimals,zero);
+      qdy30a_format(measurement.range_max,measurement.decimals,full_scale);
       // Unit code exposed explicitly: variants use different code tables.
       sprintf(ethernet_buffer,"{\"sensor_ok\":true,\"value\":%s,\"unit_code\":%LU,\"raw\":%LD,\"decimals\":%u,\"range_min\":%s,\"range_max\":%s,\"sample\":%LU}\r\n",
-         value,(unsigned int32)registers[2],(signed int32)(signed int16)registers[4],
-         (unsigned int8)registers[3],zero,full_scale,samples);
+         value,(unsigned int32)measurement.unit_code,(signed int32)measurement.raw,
+         (unsigned int8)measurement.decimals,zero,full_scale,samples);
       printf(diagnostics_putc,"QDY value=%s unit_code=%LU raw=%LD decimals=%u baud_code=%LU\r\n",
-         value,(unsigned int32)registers[2],(signed int32)(signed int16)registers[4],
-         (unsigned int8)registers[3],(unsigned int32)registers[1]);
+         value,(unsigned int32)measurement.unit_code,(signed int32)measurement.raw,
+         (unsigned int8)measurement.decimals,(unsigned int32)measurement.baud_code);
    }
    output_bit(LED2,(error==0)==((STATION_LED_ACTIVE_MASK & 2)!=0));
    ethernet_start();

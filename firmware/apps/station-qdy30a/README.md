@@ -104,3 +104,11 @@ Log: `logs/20261103-095643-970114-station-qdy30a.log`.
 El firmware genera y encola el JSON en UART3 despues de cada lectura.
 Pendientes: confirmar la unidad fisica del codigo 17 con el manual del sensor
 y verificar recepcion del JSON en el modulo Ethernet y ThingsBoard.
+
+## Driver de sensor reutilizable
+
+La lectura, validacion y conversion QDY30A ahora provienen de
+[galio-sensors](https://github.com/galio-electronics/galio-sensors),
+fijado por commit y huellas en `config/dependencies.json`. El adaptador usa
+`simple_master`; la app conserva configuracion UART/DE/RE, direccion,
+intervalo, eventos y telemetria. Ver [guia de integracion](../../../docs/sensors.md).

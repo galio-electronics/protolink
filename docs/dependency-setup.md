@@ -42,3 +42,6 @@ Los repositorios privados usan Git Credential Manager: autenticar Git previament
 no guardar tokens en URLs ni archivos versionados. Un checkout ya verificado se
 reutiliza sin conexión. Las antiguas descargas del `galio/` raíz quedan intactas,
 pero las herramientas ya no las usan.
+
+Para sensores Modbus, ver [sensores reutilizables](sensors.md): las apps QDY30A
+fijan `galio-sensors` para el driver y `simple_master` para el transporte.

@@ -69,3 +69,11 @@ fisicamente apagado. La placa queda ejecutando esta version.
 
 El diagnostico muestra transiciones de estado y resultados MQTT/CME sin
 imprimir comandos de conexion ni credenciales.
+
+## Driver de sensor reutilizable
+
+La lectura, validacion y conversion QDY30A ahora provienen de
+[galio-sensors](https://github.com/galio-electronics/galio-sensors),
+fijado por commit y huellas en `config/dependencies.json`. El adaptador usa
+`simple_master`; la app conserva configuracion UART/DE/RE, direccion,
+intervalo, eventos y telemetria. Ver [guia de integracion](../../../docs/sensors.md).

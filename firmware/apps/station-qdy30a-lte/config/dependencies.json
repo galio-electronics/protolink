@@ -18,6 +18,16 @@
         "common/lte_at.c": "c5c9a36c170a0daced5a1a211ca1b89e6a5ce64e1d17a82d293b5544691ab234",
         "simcom/a7670.c": "d87c74fac1c3311c61f7a08d410f4c62a926d424a0e455097d1635c3d185f3ff"
       }
+    },
+    "galio-sensors": {
+      "url": "https://github.com/galio-electronics/galio-sensors.git",
+      "commit": "3d93cfd078151baa9ef70cd5cba29ded48836a64",
+      "sha256": {
+        "include/galio_sensor_types.h": "0fbe9712d5da3bba66795f7ad1a842153f7125ac4eeed6b14b5eedb0f003b9cb",
+        "adapters/modbus_simple_master.h": "758f8710942bfbd64fa86df6d19317436eacbc3bade9d63852596c61db07f497",
+        "sensors/qdy30a/qdy30a.c": "51c91dc08b542ae0de37d08665633b58abdbba78e41fc2ddb1fb6490018acd2c",
+        "sensors/qdy30a/qdy30a.h": "640014846bcc41f3a81fdd1a9e4de075e4a9d629e3de133f1f603330a0ecc949"
+      }
     }
   }
 }
