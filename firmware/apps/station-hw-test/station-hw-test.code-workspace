@@ -7,10 +7,6 @@
     {
       "name": "Protolink common",
       "path": "../../common"
-    },
-    {
-      "name": "Galio analog_drivers",
-      "path": "galio/analog_drivers"
     }
   ],
   "tasks": {
