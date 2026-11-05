@@ -9,7 +9,7 @@
 #byte qdy_tx4sta=getenv("SFR:TX4STA")
 #bit qdy_tx_empty=qdy_tx4sta.1
 #define SMODBUS_WAIT_TX_DONE() while(!qdy_tx_empty) { }
-#include "../../common/library_config.h"
+#include <simple_master/simple_master.c>
 #define GALIO_SENSORS_CCS 1
 #include <galio-sensors/adapters/modbus_simple_master.h>
 #include <galio-sensors/sensors/qdy30a/qdy30a.c>
