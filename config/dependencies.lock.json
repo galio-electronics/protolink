@@ -46,6 +46,15 @@
         "sd_card.c": "f82b4bd99306714b80aac4a4789ffbfed1ce48123f027971e8954d5bd0c0d2df",
         "sd_card.h": "002c3a9a0990213abbb547810855348d6e8d529bb4eb191b36f546f542cbcd66"
       }
+    },
+    "analog_drivers": {
+      "path": "../analog_drivers",
+      "sha256": {
+        "ads1115.c": "809d03125596c3754ef151382b83960b6c781271e3d46b5d773cae87bcdb7cf7",
+        "ads1115.h": "19a147de2667ae43bea1c14ab4089ac4210033ebc82f985bb0aba6f7948a8df8",
+        "ina281.c": "6d1d9d5ebcc58199e9e57e9f75de47529b368e79f2ce40d45dde4fb95cc94b3e",
+        "ina281.h": "cef75d91310a0ec975573457767264df28e7887ee28994fbae1cd98975101ea5"
+      }
     }
   }
 }

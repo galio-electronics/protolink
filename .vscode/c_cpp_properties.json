@@ -19,6 +19,7 @@
         "path": [
           "${workspaceFolder}",
           "G:/Proyectos/PIC/simple_master",
+          "G:/Proyectos/PIC/analog_drivers",
           "G:/Proyectos/PIC/rui3_at",
           "G:/Proyectos/PIC/lcd_i2c",
           "G:/Proyectos/PIC/oled_i2c",

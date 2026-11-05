@@ -12,7 +12,7 @@
  * has no deadline or ACK propagation, so this test uses the checked shared
  * bus adapter and a cooperative conversion sequence instead. */
 #define ADS1115_I2C_ADDR_7BIT 0x49
-#include <protolink-projects/libs/analog_drivers/ads1115.h>
+#include <analog_drivers/ads1115.h>
 static unsigned int8 hw_phase=0,hw_channel=0,hw_result=255,hw_rdy,hw_rdy_busy;
 static signed int16 hw_raw[2];
 static unsigned int32 hw_started=0,hw_last=0,hw_samples=0,hw_errors=0;

@@ -39,7 +39,7 @@ comparte las mismas asignaciones PPS; se eliminaron sus declaraciones
 duplicadas. El puerto común configura 100 kHz. RG7 continúa siendo RTC_MFP;
 no se usa el antiguo EE_WP de V2. No se agregaron sondas periódicas a otros
 periféricos. La supervisión de alimentación está deshabilitada: no hay divisor
-ni límites verificados. El ADS1115 externo de `../protolink-projects` entrega
+ni límites verificados. El ADS1115 externo de `../analog_drivers` entrega
 datos sin propagar ACK/error de lectura; se ofrece `event_health_adc`, pero
 no se activa ni se presenta esa lectura como comprobación de salud.
 
