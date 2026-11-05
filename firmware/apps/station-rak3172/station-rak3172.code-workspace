@@ -7,14 +7,6 @@
     {
       "name": "Protolink common",
       "path": "../../common"
-    },
-    {
-      "name": "Galio rui3_at",
-      "path": "galio/rui3_at"
-    },
-    {
-      "name": "Galio oled_i2c",
-      "path": "galio/oled_i2c"
     }
   ],
   "tasks": {

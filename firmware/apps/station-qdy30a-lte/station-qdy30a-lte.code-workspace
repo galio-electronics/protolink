@@ -7,18 +7,6 @@
     {
       "name": "Protolink common",
       "path": "../../common"
-    },
-    {
-      "name": "LTE modules",
-      "path": "../../../../lte-module"
-    },
-    {
-      "name": "Galio simple_master",
-      "path": "galio/simple_master"
-    },
-    {
-      "name": "Galio lte-module",
-      "path": "galio/lte-module"
     }
   ],
   "tasks": {

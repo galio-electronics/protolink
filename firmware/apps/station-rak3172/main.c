@@ -8,7 +8,8 @@
 #pin_select U5RX=RX_5
 #use i2c(Master,I2C1,FAST=400000,STREAM=OLED_I2C)
 #define OLED_I2C_STREAM OLED_I2C
-#include "../../common/library_config.h"
+#include <oled_i2c/oled_ssd1306.h>
+#include <rui3_at/rui3_at.h>
 #include "../../common/dht22.c"
 
 /* Adapter for the existing driver: reuse UART/ISR/ring and TX, but parse
