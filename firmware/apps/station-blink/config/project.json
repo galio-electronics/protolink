@@ -6,8 +6,8 @@
   "active_profile": "station-blink",
   "profiles": {
     "station-blink": {
-      "source": "../../examples/protolink-hello-world.c",
-      "description": "Ejemplo minimo original, sin consola"
+      "source": "main.c",
+      "description": "Demo de parpadeo consecutivo LED1 a LED4, sin consola"
     }
   }
 }
