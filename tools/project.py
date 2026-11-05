@@ -7,13 +7,32 @@ import subprocess
 import dependencies
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_CONFIG = ROOT / 'config/project.json'
+DEFAULT_CONFIG = None
 
 
 def load_config(path=DEFAULT_CONFIG, profile=None, port=None):
+    if path is None:
+        if profile:
+            matches = [p for folder in ('apps', 'examples')
+                       for p in (ROOT/'firmware'/folder).glob('*/config/project.json')
+                       if p.parent.parent.name == profile]
+            if len(matches) != 1:
+                raise ValueError(f'App no encontrada: {profile}; usar --config')
+            path = matches[0]
+        else:
+            path = Path.cwd()/'config/project.json'
     path = Path(path).resolve()
+    if not path.is_file():
+        raise ValueError('Abrir el workspace de una app o indicar --config / --profile')
+    app_root = path.parent.parent
     config = json.loads(path.read_text(encoding='utf-8-sig'))
     local = ROOT / 'config/local.json'
+    if local.exists():
+        overrides = json.loads(local.read_text(encoding='utf-8-sig'))
+        for key in ('compiler', 'ccs_root', 'port'):
+            if key in overrides:
+                config[key] = overrides[key]
+    local = path.parent/'local.json'
     if local.exists():
         overrides = json.loads(local.read_text(encoding='utf-8-sig'))
         for key in ('compiler', 'ccs_root', 'port'):
@@ -22,24 +41,24 @@ def load_config(path=DEFAULT_CONFIG, profile=None, port=None):
     chosen = profile or config['active_profile']
     if chosen not in config['profiles'] or not re.fullmatch(r'[a-zA-Z0-9_-]+', chosen):
         raise ValueError(f'Perfil no valido: {chosen}')
-    source = (ROOT / config['profiles'][chosen]['source']).resolve()
-    if not source.is_relative_to(ROOT) or not source.is_file():
+    source = (app_root / config['profiles'][chosen]['source']).resolve()
+    if not source.is_file():
         raise ValueError(f'Fuente inexistente o fuera del repositorio: {source}')
-    config.update(profile=chosen, source=source, output_dir=ROOT/'build'/chosen)
+    config.update(profile=chosen, source=source, output_dir=app_root/'build'/chosen, app_root=app_root)
     config['hex_path'] = config['output_dir'] / (source.stem + '.hex')
     config['config_path'] = path
-    config['library_root'] = ROOT/'galio'
+    config['library_root'] = app_root/'galio'
     if port:
         config['port'] = port
     return config
 
 
 def dependency_status(config, all_libraries=False):
-    return dependencies.status(ROOT, config['profile'], all_libraries)
+    return dependencies.status(config['app_root'], config['profile'], all_libraries)
 
 
 def compile_project(config):
-    dependencies.ensure(ROOT, config['profile'])
+    dependencies.ensure(config['app_root'], config['profile'])
     source, directory = config['source'], config['output_dir']
     directory.mkdir(parents=True, exist_ok=True)
     output = config['hex_path']

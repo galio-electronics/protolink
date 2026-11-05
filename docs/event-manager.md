@@ -47,7 +47,6 @@ no se activa ni se presenta esa lectura como comprobación de salud.
 
 | Aplicación | Máscara de módulos | EEPROM | Supervisión activa |
 |---|---:|---:|---|
-| station-master | 0x0005 | Sí | Sistema, EEPROM; SD ausente/deshabilitada |
 | station-rtc-sd | 0x0017 | Sí | Sistema, RTC, EEPROM, SD |
 | station-rak3172 | 0x000D | Sí | Sistema, EEPROM, respuesta AT/timeout UART |
 | station-qdy30a | 0x0045 | Sí | Sistema, EEPROM, transacción QDY30A |
@@ -270,7 +269,7 @@ HEALTH usa IDs/estados numéricos descritos arriba. Texto solo en diagnóstico.
 Comandos reproducibles:
 
 ```powershell
-.\tools\run.ps1 build --profile station-master
+.\tools\run.ps1 build --profile station-rtc-sd
 .\tools\run.ps1 build --profile station-rtc-sd
 .\tools\run.ps1 build --profile station-rak3172
 .\tools\run.ps1 build --profile station-qdy30a

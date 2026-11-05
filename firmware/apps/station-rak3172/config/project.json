@@ -1,0 +1,13 @@
+{
+  "port": "COM33",
+  "baud": 115200,
+  "compiler": "C:/Program Files (x86)/PICC/CCSCON.exe",
+  "ccs_root": "C:/Program Files (x86)/PICC",
+  "active_profile": "station-rak3172",
+  "profiles": {
+    "station-rak3172": {
+      "source": "main.c",
+      "description": "RAK3172 UART5 OTAA ChirpStack US915 canales 0-7"
+    }
+  }
+}

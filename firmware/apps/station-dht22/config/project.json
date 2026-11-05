@@ -1,0 +1,13 @@
+{
+  "port": "COM33",
+  "baud": 115200,
+  "compiler": "C:/Program Files (x86)/PICC/CCSCON.exe",
+  "ccs_root": "C:/Program Files (x86)/PICC",
+  "active_profile": "station-dht22",
+  "profiles": {
+    "station-dht22": {
+      "source": "main.c",
+      "description": "DHT22 + LCD + telemetria JSON por Ethernet UART3"
+    }
+  }
+}

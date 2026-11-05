@@ -1,8 +1,8 @@
 # Dependencias y propiedad de recursos
 
-Las dependencias Git se descargan automaticamente dentro de `galio/` antes de
-compilar. El manifiesto `config/dependencies.json` contiene URLs, commits,
-huellas SHA256 y la lista por aplicacion. Los repositorios originales hermanos
+Las dependencias Git se descargan automáticamente dentro de `<app>/galio/` antes de
+compilar. El manifiesto `<app>/config/dependencies.json` contiene URLs, commits,
+huellas SHA256 y la lista por aplicación. Los repositorios originales hermanos
 no se modifican ni se requieren para los builds nuevos.
 
 Ver [preparacion en otra computadora y actualizaciones](dependency-setup.md).
@@ -12,7 +12,7 @@ cambios locales o no coincide con el manifiesto, el build se detiene sin tocarla
 Excepcion incorporada con `station-qdy30a`: `simple_master` ahora permite 8N1,
 espera fin de TX antes de liberar DE y limita la recepcion completa por timeout.
 Las huellas actuales incluyen esos cambios; el parche reproducible esta en
-`patches/simple-master-station-rs485.patch`. Ver la guia de la demo para alcance
+`patches/simple-master-station-rs485.patch`. Ver la guía de la demo para alcance
 y estado de pruebas fisicas.
 
 | Dependencia | Inclusión actual | Observaciones de integración |

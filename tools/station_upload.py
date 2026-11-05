@@ -161,16 +161,16 @@ def main():
         ap.error('--all solo aplica a dependencies y deps-sync')
     if args.seconds is not None and args.seconds < 0:
         ap.error('--seconds debe ser >= 0')
+    if args.action == 'tests':
+        import unittest
+        suite = unittest.defaultTestLoader.discover(str(ROOT/'tests'))
+        return int(not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful())
     config = load_config(args.config, args.profile, None if args.action == 'select-port' else args.port)
     if args.action == 'select-port':
         select_port(config['port'], args.port)
         return 0
     if args.action in ('upload', 'build-upload', 'build-upload-monitor', 'monitor'):
         require_port(config)
-    if args.action == 'tests':
-        import unittest
-        suite = unittest.defaultTestLoader.discover(str(ROOT/'tests'))
-        return int(not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful())
     if args.action == 'profiles':
         for name, entry in config['profiles'].items():
             print(('* ' if name == config['active_profile'] else '  ') + name + ': ' + entry['source'])
@@ -178,13 +178,13 @@ def main():
     if args.action == 'select':
         if not args.profile:
             ap.error('select requiere --profile')
-        saved = json.loads(args.config.read_text(encoding='utf-8-sig'))
+        saved = json.loads(config['config_path'].read_text(encoding='utf-8-sig'))
         saved['active_profile'] = args.profile
-        args.config.write_text(json.dumps(saved, indent=2)+'\n', encoding='utf-8')
+        config['config_path'].write_text(json.dumps(saved, indent=2)+'\n', encoding='utf-8')
         print(f"Perfil activo: {args.profile}\nFuente: {config['source']}")
         return 0
     if args.action == 'deps-sync':
-        dependencies.ensure(ROOT, config['profile'], args.all)
+        dependencies.ensure(config['app_root'], config['profile'], args.all)
         return 0
     if args.action == 'dependencies':
         states = dependency_status(config, args.all)

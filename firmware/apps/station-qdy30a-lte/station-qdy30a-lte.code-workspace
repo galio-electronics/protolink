@@ -14,11 +14,11 @@
     },
     {
       "name": "Galio simple_master",
-      "path": "../../../galio/simple_master"
+      "path": "galio/simple_master"
     },
     {
       "name": "Galio lte-module",
-      "path": "../../../galio/lte-module"
+      "path": "galio/lte-module"
     }
   ],
   "tasks": {
@@ -35,8 +35,8 @@
           "-File",
           "${workspaceFolder:Station QDY30A LTE}/../../../tools/run.ps1",
           "build",
-          "--profile",
-          "station-qdy30a-lte"
+          "--config",
+          "${workspaceFolder:Station QDY30A LTE}/config/project.json"
         ],
         "problemMatcher": [
           {
@@ -78,8 +78,8 @@
           "-File",
           "${workspaceFolder:Station QDY30A LTE}/../../../tools/run.ps1",
           "build-upload-monitor",
-          "--profile",
-          "station-qdy30a-lte"
+          "--config",
+          "${workspaceFolder:Station QDY30A LTE}/config/project.json"
         ],
         "problemMatcher": [
           {
@@ -117,8 +117,8 @@
           "-File",
           "${workspaceFolder:Station QDY30A LTE}/../../../tools/run.ps1",
           "monitor",
-          "--profile",
-          "station-qdy30a-lte"
+          "--config",
+          "${workspaceFolder:Station QDY30A LTE}/config/project.json"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -141,8 +141,8 @@
           "-File",
           "${workspaceFolder:Station QDY30A LTE}/../../../tools/run.ps1",
           "select-port",
-          "--profile",
-          "station-qdy30a-lte"
+          "--config",
+          "${workspaceFolder:Station QDY30A LTE}/config/project.json"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -166,8 +166,8 @@
           "-File",
           "${workspaceFolder:Station QDY30A LTE}/../../../tools/run.ps1",
           "deps-sync",
-          "--profile",
-          "station-qdy30a-lte"
+          "--config",
+          "${workspaceFolder:Station QDY30A LTE}/config/project.json"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -187,7 +187,7 @@
     "C_Cpp.errorSquiggles": "disabled",
     "C_Cpp.default.includePath": [
       "${workspaceFolder:Station QDY30A LTE}/../../../**",
-      "${workspaceFolder:Station QDY30A LTE}/../../../galio",
+      "${workspaceFolder:Station QDY30A LTE}/galio",
       "C:/Program Files (x86)/PICC/Devices",
       "C:/Program Files (x86)/PICC/Drivers"
     ]

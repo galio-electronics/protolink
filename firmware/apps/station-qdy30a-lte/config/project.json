@@ -1,0 +1,13 @@
+{
+  "port": "COM33",
+  "baud": 115200,
+  "compiler": "C:/Program Files (x86)/PICC/CCSCON.exe",
+  "ccs_root": "C:/Program Files (x86)/PICC",
+  "active_profile": "station-qdy30a-lte",
+  "profiles": {
+    "station-qdy30a-lte": {
+      "source": "main.c",
+      "description": "QDY30A RS485 UART4 + SIMCom A7670 UART5 MQTT celular"
+    }
+  }
+}

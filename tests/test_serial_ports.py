@@ -68,7 +68,7 @@ class SerialPortsTests(unittest.TestCase):
                 serial_ports.require_port({'port': 'COM99', 'profile': 'test'})
 
     def test_task_available_in_every_app_workspace(self):
-        paths = [project.ROOT/'.vscode/tasks.json', *project.ROOT.glob('firmware/**/*.code-workspace')]
+        paths = list(project.ROOT.glob('firmware/**/*.code-workspace'))
         for path in paths:
             data = json.loads(path.read_text())
             tasks = data['tasks'] if path.suffix == '.json' else data['tasks']['tasks']

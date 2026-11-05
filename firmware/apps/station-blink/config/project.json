@@ -1,0 +1,13 @@
+{
+  "port": "COM33",
+  "baud": 115200,
+  "compiler": "C:/Program Files (x86)/PICC/CCSCON.exe",
+  "ccs_root": "C:/Program Files (x86)/PICC",
+  "active_profile": "station-blink",
+  "profiles": {
+    "station-blink": {
+      "source": "../../examples/protolink-hello-world.c",
+      "description": "Ejemplo minimo original, sin consola"
+    }
+  }
+}

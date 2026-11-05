@@ -19,7 +19,15 @@ class WorkflowTests(unittest.TestCase):
     def test_profile_selects_main_not_open_file(self):
         config = project.load_config(profile='station-client')
         self.assertEqual(config['source'],project.ROOT/'firmware/examples/station-client/main.c')
-        self.assertEqual(config['hex_path'],project.ROOT/'build/station-client/main.hex')
+        self.assertEqual(config['hex_path'],project.ROOT/'firmware/examples/station-client/build/station-client/main.hex')
+
+    def test_every_app_owns_its_dependencies_and_outputs(self):
+        for path in project.ROOT.glob('firmware/**/config/project.json'):
+            config = project.load_config(path)
+            app = path.parent.parent
+            self.assertEqual(config['library_root'], app/'galio')
+            self.assertTrue(config['output_dir'].is_relative_to(app))
+            self.assertTrue((app/'config/dependencies.json').is_file())
 
     def test_unknown_profile_rejected(self):
         with self.assertRaises(ValueError): project.load_config(profile='not-a-profile')
@@ -51,8 +59,8 @@ class WorkflowTests(unittest.TestCase):
 
     def test_task_matcher_matches_ccs(self):
         import re
-        tasks=json.loads((project.ROOT/'.vscode/tasks.json').read_text())
-        pattern=tasks['tasks'][0]['problemMatcher'][0]['pattern']['regexp']
+        tasks=json.loads((project.ROOT/'firmware/apps/station-demo/station-demo.code-workspace').read_text())
+        pattern=tasks['tasks']['tasks'][0]['problemMatcher'][0]['pattern']['regexp']
         match=re.match(pattern,r'G:\path\main.c:12:3: error CCS90: Bad expression')
         self.assertEqual(match.group(2),'12')
         self.assertEqual(match.group(4),'error')

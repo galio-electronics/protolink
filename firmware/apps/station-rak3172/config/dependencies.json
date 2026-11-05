@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "directory": "galio",
+  "libraries": {
+    "rui3_at": {
+      "url": "https://github.com/artgasca/rui3_at.git",
+      "commit": "defbfbac8179d8da4a9e96b3e11784a7bc554213",
+      "sha256": {
+        "rui3_at.c": "e2391e870cf64391cac71ab68d41411a1fd5a4eebc3db484a1515ba593dc48f8",
+        "rui3_at.h": "7cbdb5f13494b9ee1c056ed6c6826746ecb08c152eba93cbfe3737ea97f19b2b"
+      }
+    },
+    "oled_i2c": {
+      "url": "https://github.com/galio-electronics/oled_i2c.git",
+      "commit": "91dc717eb780ef17100bd69b68d293ff3e3824b9",
+      "sha256": {
+        "fonts/font5x7.h": "8cc2b2e1ff2ac2e7b5cff7fc4567babacf943a018ede869d55ee5998027cde1e",
+        "images/galio_logo_128x32.h": "f52ff4c3a25a1779bfff14df6ed0737bc25f826e23f7c2df16509cdf22802d3e",
+        "oled_ssd1306.c": "402ea90c5b57ee4517a0014db6ea6f4ce8095f26f4668ecc126fc56fa361a52c",
+        "oled_ssd1306.h": "c843df4935c64ac949d07866aac937b48961acd147778c435b57055ae2e60da7"
+      }
+    }
+  }
+}

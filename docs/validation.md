@@ -1,3 +1,5 @@
+> Registro histórico: el firmware y workspace maestros fueron retirados. Las rutas mencionadas reflejan las pruebas de entonces.
+
 # Validación — 2 de noviembre de 2026
 
 Se ejecutaron las tareas mediante `tools/run.ps1`, el mismo lanzador de VS Code.

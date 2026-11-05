@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "directory": "galio",
+  "libraries": {
+    "analog_drivers": {
+      "url": "https://github.com/artgasca/analog_drivers.git",
+      "commit": "97e599d07e3b4fb8ad99b27c94ab83951f3a92cb",
+      "sha256": {
+        "ads1115.c": "fef741c60e2efbcebd7d069234d8cf68f4f8ccaaac917c63c72fbd49ab372866",
+        "ads1115.h": "780c3bec5fa39c8bef7fec111e883648e166e28cd37b713724202bca4852ac74",
+        "ina281.c": "44d5264abd9031450bc7585248ba849c2c4fade71bc54ac5b4bb6d358a5efe7e",
+        "ina281.h": "5daa084315887f7fcc31ddb39258c181407079cc93a378f22d1f97749c00fbcf"
+      }
+    }
+  }
+}

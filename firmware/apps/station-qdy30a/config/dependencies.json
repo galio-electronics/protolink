@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "directory": "galio",
+  "libraries": {
+    "simple_master": {
+      "url": "https://github.com/galio-electronics/simple_master.git",
+      "commit": "b889ff9a3af44524be9dcef0f1c6b663fafbfb39",
+      "sha256": {
+        "simple_master.c": "8344d734f4c6497aed1f59d3d4d11d73d1682f4d9124394e74e90fe18b828169",
+        "simple_master.h": "d63c1da8650c80c64ecfd6b1c9ca6e09120c4b3c25b884eb1fccbb6154050748"
+      }
+    }
+  }
+}

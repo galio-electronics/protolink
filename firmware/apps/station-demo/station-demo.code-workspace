@@ -1,0 +1,198 @@
+{
+  "folders": [
+    {
+      "name": "Station Demo",
+      "path": "."
+    },
+    {
+      "name": "Protolink common",
+      "path": "../../common"
+    }
+  ],
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Station Demo: Compilar",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:Station Demo}/../../../tools/run.ps1",
+          "build",
+          "--config",
+          "${workspaceFolder:Station Demo}/config/project.json"
+        ],
+        "problemMatcher": [
+          {
+            "owner": "ccs",
+            "source": "CCS 5.081",
+            "fileLocation": "absolute",
+            "pattern": {
+              "regexp": "^(.*):(\\d+):(\\d+):\\s+(error|warning) CCS(\\d+): (.*)$",
+              "file": 1,
+              "line": 2,
+              "column": 3,
+              "severity": 4,
+              "code": 5,
+              "message": 6
+            }
+          }
+        ],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "focus": false
+        },
+        "runOptions": {
+          "instanceLimit": 1
+        },
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "options": {
+          "cwd": "${workspaceFolder:Station Demo}/../../.."
+        }
+      },
+      {
+        "label": "Station Demo: Compilar, subir y monitorear",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:Station Demo}/../../../tools/run.ps1",
+          "build-upload-monitor",
+          "--config",
+          "${workspaceFolder:Station Demo}/config/project.json"
+        ],
+        "problemMatcher": [
+          {
+            "owner": "ccs",
+            "source": "CCS 5.081",
+            "fileLocation": "absolute",
+            "pattern": {
+              "regexp": "^(.*):(\\d+):(\\d+):\\s+(error|warning) CCS(\\d+): (.*)$",
+              "file": 1,
+              "line": 2,
+              "column": 3,
+              "severity": 4,
+              "code": 5,
+              "message": 6
+            }
+          }
+        ],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "focus": true
+        },
+        "runOptions": {
+          "instanceLimit": 1
+        },
+        "options": {
+          "cwd": "${workspaceFolder:Station Demo}/../../.."
+        }
+      },
+      {
+        "label": "Station Demo: Monitor serie",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:Station Demo}/../../../tools/run.ps1",
+          "monitor",
+          "--config",
+          "${workspaceFolder:Station Demo}/config/project.json"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "focus": true
+        },
+        "runOptions": {
+          "instanceLimit": 1
+        },
+        "options": {
+          "cwd": "${workspaceFolder:Station Demo}/../../.."
+        }
+      },
+      {
+        "label": "Protolink: Seleccionar puerto COM",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:Station Demo}/../../../tools/run.ps1",
+          "select-port",
+          "--config",
+          "${workspaceFolder:Station Demo}/config/project.json"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "focus": true,
+          "clear": true
+        },
+        "runOptions": {
+          "instanceLimit": 1
+        },
+        "options": {
+          "cwd": "${workspaceFolder:Station Demo}/../../.."
+        }
+      },
+      {
+        "label": "Protolink: Preparar dependencias",
+        "type": "process",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:Station Demo}/../../../tools/run.ps1",
+          "deps-sync",
+          "--config",
+          "${workspaceFolder:Station Demo}/config/project.json"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "focus": true,
+          "clear": true
+        },
+        "runOptions": {
+          "instanceLimit": 1
+        },
+        "options": {
+          "cwd": "${workspaceFolder:Station Demo}/../../.."
+        }
+      }
+    ]
+  },
+  "settings": {
+    "files.autoSave": "afterDelay",
+    "C_Cpp.errorSquiggles": "disabled",
+    "C_Cpp.default.includePath": [
+      "${workspaceFolder:Station Demo}/../../../**",
+      "${workspaceFolder:Station Demo}/galio",
+      "C:/Program Files (x86)/PICC/Devices",
+      "C:/Program Files (x86)/PICC/Drivers"
+    ]
+  }
+}

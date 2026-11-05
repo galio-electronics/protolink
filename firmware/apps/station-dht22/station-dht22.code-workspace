@@ -10,7 +10,7 @@
     },
     {
       "name": "Galio lcd_i2c",
-      "path": "../../../galio/lcd_i2c"
+      "path": "galio/lcd_i2c"
     }
   ],
   "tasks": {
@@ -27,8 +27,8 @@
           "-File",
           "${workspaceFolder:Station DHT22}/../../../tools/run.ps1",
           "build",
-          "--profile",
-          "station-dht22"
+          "--config",
+          "${workspaceFolder:Station DHT22}/config/project.json"
         ],
         "problemMatcher": [
           {
@@ -70,8 +70,8 @@
           "-File",
           "${workspaceFolder:Station DHT22}/../../../tools/run.ps1",
           "build-upload-monitor",
-          "--profile",
-          "station-dht22"
+          "--config",
+          "${workspaceFolder:Station DHT22}/config/project.json"
         ],
         "problemMatcher": [
           {
@@ -109,8 +109,8 @@
           "-File",
           "${workspaceFolder:Station DHT22}/../../../tools/run.ps1",
           "monitor",
-          "--profile",
-          "station-dht22"
+          "--config",
+          "${workspaceFolder:Station DHT22}/config/project.json"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -133,8 +133,8 @@
           "-File",
           "${workspaceFolder:Station DHT22}/../../../tools/run.ps1",
           "select-port",
-          "--profile",
-          "station-dht22"
+          "--config",
+          "${workspaceFolder:Station DHT22}/config/project.json"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -158,8 +158,8 @@
           "-File",
           "${workspaceFolder:Station DHT22}/../../../tools/run.ps1",
           "deps-sync",
-          "--profile",
-          "station-dht22"
+          "--config",
+          "${workspaceFolder:Station DHT22}/config/project.json"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -179,7 +179,7 @@
     "C_Cpp.errorSquiggles": "disabled",
     "C_Cpp.default.includePath": [
       "${workspaceFolder:Station DHT22}/../../../**",
-      "${workspaceFolder:Station DHT22}/../../../galio",
+      "${workspaceFolder:Station DHT22}/galio",
       "C:/Program Files (x86)/PICC/Devices",
       "C:/Program Files (x86)/PICC/Drivers"
     ]

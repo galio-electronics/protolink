@@ -10,7 +10,7 @@
     },
     {
       "name": "Galio simple_master",
-      "path": "../../../galio/simple_master"
+      "path": "galio/simple_master"
     }
   ],
   "tasks": {
@@ -27,8 +27,8 @@
           "-File",
           "${workspaceFolder:Station QDY30A}/../../../tools/run.ps1",
           "build",
-          "--profile",
-          "station-qdy30a"
+          "--config",
+          "${workspaceFolder:Station QDY30A}/config/project.json"
         ],
         "problemMatcher": [
           {
@@ -70,8 +70,8 @@
           "-File",
           "${workspaceFolder:Station QDY30A}/../../../tools/run.ps1",
           "build-upload-monitor",
-          "--profile",
-          "station-qdy30a"
+          "--config",
+          "${workspaceFolder:Station QDY30A}/config/project.json"
         ],
         "problemMatcher": [
           {
@@ -109,8 +109,8 @@
           "-File",
           "${workspaceFolder:Station QDY30A}/../../../tools/run.ps1",
           "monitor",
-          "--profile",
-          "station-qdy30a"
+          "--config",
+          "${workspaceFolder:Station QDY30A}/config/project.json"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -133,8 +133,8 @@
           "-File",
           "${workspaceFolder:Station QDY30A}/../../../tools/run.ps1",
           "select-port",
-          "--profile",
-          "station-qdy30a"
+          "--config",
+          "${workspaceFolder:Station QDY30A}/config/project.json"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -158,8 +158,8 @@
           "-File",
           "${workspaceFolder:Station QDY30A}/../../../tools/run.ps1",
           "deps-sync",
-          "--profile",
-          "station-qdy30a"
+          "--config",
+          "${workspaceFolder:Station QDY30A}/config/project.json"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -179,7 +179,7 @@
     "C_Cpp.errorSquiggles": "disabled",
     "C_Cpp.default.includePath": [
       "${workspaceFolder:Station QDY30A}/../../../**",
-      "${workspaceFolder:Station QDY30A}/../../../galio",
+      "${workspaceFolder:Station QDY30A}/galio",
       "C:/Program Files (x86)/PICC/Devices",
       "C:/Program Files (x86)/PICC/Drivers"
     ]

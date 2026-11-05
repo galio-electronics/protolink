@@ -28,14 +28,14 @@ def manifest(root):
                 raise ValueError(f'{name}: archivo fuera de la dependencia')
             if not re.fullmatch(r'[0-9a-f]{64}', digest):
                 raise ValueError(f'{name}: SHA256 invalido')
-    for names in data['applications'].values():
+    for names in data.get('applications', {}).values():
         if any(name not in data['libraries'] for name in names):
             raise ValueError('Aplicacion referencia una dependencia desconocida')
     return data
 
 
 def selected(data, profile, all_libraries=False):
-    if all_libraries:
+    if all_libraries or 'applications' not in data:
         return list(data['libraries'])
     if profile not in data['applications']:
         raise ValueError(f'Falta declarar dependencias de {profile} en config/dependencies.json')

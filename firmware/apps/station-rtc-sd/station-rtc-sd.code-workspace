@@ -10,7 +10,7 @@
     },
     {
       "name": "Galio sd-card",
-      "path": "../../../galio/sd-card"
+      "path": "galio/sd-card"
     }
   ],
   "tasks": {
@@ -27,8 +27,8 @@
           "-File",
           "${workspaceFolder:Station RTC SD}/../../../tools/run.ps1",
           "build",
-          "--profile",
-          "station-rtc-sd"
+          "--config",
+          "${workspaceFolder:Station RTC SD}/config/project.json"
         ],
         "problemMatcher": [
           {
@@ -70,8 +70,8 @@
           "-File",
           "${workspaceFolder:Station RTC SD}/../../../tools/run.ps1",
           "build-upload-monitor",
-          "--profile",
-          "station-rtc-sd"
+          "--config",
+          "${workspaceFolder:Station RTC SD}/config/project.json"
         ],
         "problemMatcher": [
           {
@@ -109,8 +109,8 @@
           "-File",
           "${workspaceFolder:Station RTC SD}/../../../tools/run.ps1",
           "monitor",
-          "--profile",
-          "station-rtc-sd"
+          "--config",
+          "${workspaceFolder:Station RTC SD}/config/project.json"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -133,8 +133,8 @@
           "-File",
           "${workspaceFolder:Station RTC SD}/../../../tools/run.ps1",
           "select-port",
-          "--profile",
-          "station-rtc-sd"
+          "--config",
+          "${workspaceFolder:Station RTC SD}/config/project.json"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -158,8 +158,8 @@
           "-File",
           "${workspaceFolder:Station RTC SD}/../../../tools/run.ps1",
           "deps-sync",
-          "--profile",
-          "station-rtc-sd"
+          "--config",
+          "${workspaceFolder:Station RTC SD}/config/project.json"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -179,7 +179,7 @@
     "C_Cpp.errorSquiggles": "disabled",
     "C_Cpp.default.includePath": [
       "${workspaceFolder:Station RTC SD}/../../../**",
-      "${workspaceFolder:Station RTC SD}/../../../galio",
+      "${workspaceFolder:Station RTC SD}/galio",
       "C:/Program Files (x86)/PICC/Devices",
       "C:/Program Files (x86)/PICC/Drivers"
     ]

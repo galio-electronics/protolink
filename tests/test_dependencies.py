@@ -63,6 +63,19 @@ class DependenciesTests(unittest.TestCase):
         deps.ensure(self.root, 'demo')
         self.assertFalse(any(c[0] in ('clone','fetch','pull','checkout') for c in self.calls))
 
+    def test_app_manifests_are_isolated(self):
+        self.data.pop('applications')
+        self.data['libraries'].pop('unused')
+        self.save()
+        other = self.root/'other-app'
+        (other/'config').mkdir(parents=True)
+        (other/'config/dependencies.json').write_text(json.dumps({
+            'schema_version': 1, 'directory': 'galio', 'libraries': {}}))
+        deps.ensure(self.root, 'demo')
+        self.assertEqual(deps.ensure(other, 'demo'), {})
+        self.assertFalse((other/'galio').exists())
+        self.assertTrue((self.root/'galio/driver/driver.h').is_file())
+
     def test_modified_and_untracked_files_preserved(self):
         deps.ensure(self.root, 'demo')
         target = self.root/'galio/driver'

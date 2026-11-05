@@ -17,3 +17,7 @@
 
 # Repositorios de dependencias descargados por tools/dependencies.py
 /galio/
+
+**/galio/
+**/build/
+**/config/local.json

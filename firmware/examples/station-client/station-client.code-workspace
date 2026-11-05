@@ -10,7 +10,7 @@
     },
     {
       "name": "Galio lcd_i2c",
-      "path": "../../../galio/lcd_i2c"
+      "path": "galio/lcd_i2c"
     }
   ],
   "tasks": {
@@ -27,8 +27,8 @@
           "-File",
           "${workspaceFolder:Cliente Station}/../../../tools/run.ps1",
           "build",
-          "--profile",
-          "station-client"
+          "--config",
+          "${workspaceFolder:Cliente Station}/config/project.json"
         ],
         "problemMatcher": [
           {
@@ -70,8 +70,8 @@
           "-File",
           "${workspaceFolder:Cliente Station}/../../../tools/run.ps1",
           "build-upload-monitor",
-          "--profile",
-          "station-client"
+          "--config",
+          "${workspaceFolder:Cliente Station}/config/project.json"
         ],
         "problemMatcher": [
           {
@@ -109,8 +109,8 @@
           "-File",
           "${workspaceFolder:Cliente Station}/../../../tools/run.ps1",
           "monitor",
-          "--profile",
-          "station-client"
+          "--config",
+          "${workspaceFolder:Cliente Station}/config/project.json"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -133,8 +133,8 @@
           "-File",
           "${workspaceFolder:Cliente Station}/../../../tools/run.ps1",
           "select-port",
-          "--profile",
-          "station-client"
+          "--config",
+          "${workspaceFolder:Cliente Station}/config/project.json"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -158,8 +158,8 @@
           "-File",
           "${workspaceFolder:Cliente Station}/../../../tools/run.ps1",
           "deps-sync",
-          "--profile",
-          "station-client"
+          "--config",
+          "${workspaceFolder:Cliente Station}/config/project.json"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -179,7 +179,7 @@
     "C_Cpp.errorSquiggles": "disabled",
     "C_Cpp.default.includePath": [
       "${workspaceFolder:Cliente Station}/../../../**",
-      "${workspaceFolder:Cliente Station}/../../../galio",
+      "${workspaceFolder:Cliente Station}/galio",
       "C:/Program Files (x86)/PICC/Devices",
       "C:/Program Files (x86)/PICC/Drivers"
     ]

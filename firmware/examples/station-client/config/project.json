@@ -1,0 +1,13 @@
+{
+  "port": "COM33",
+  "baud": 115200,
+  "compiler": "C:/Program Files (x86)/PICC/CCSCON.exe",
+  "ccs_root": "C:/Program Files (x86)/PICC",
+  "active_profile": "station-client",
+  "profiles": {
+    "station-client": {
+      "source": "main.c",
+      "description": "Plantilla de aplicacion para clientes"
+    }
+  }
+}

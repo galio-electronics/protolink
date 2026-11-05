@@ -19,6 +19,7 @@ def save_port(port, path=LOCAL_CONFIG):
     path = Path(path)
     saved = json.loads(path.read_text(encoding='utf-8-sig')) if path.exists() else {}
     saved['port'] = port
+    path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix('.json.tmp')
     temporary.write_text(json.dumps(saved, indent=2) + '\n', encoding='utf-8')
     temporary.replace(path)

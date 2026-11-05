@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "directory": "galio",
+  "libraries": {
+    "lcd_i2c": {
+      "url": "https://github.com/artgasca/lcd_i2c.git",
+      "commit": "365248242395e5cd8da416f8dd2d6c86a452c90e",
+      "sha256": {
+        "lcd_i2c.c": "e50a50ec04ed52472ae0aeb6b7755d4e06d187c80b32beae26fd731dd97fbcfc"
+      }
+    }
+  }
+}

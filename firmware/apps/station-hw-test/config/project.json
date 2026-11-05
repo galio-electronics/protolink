@@ -1,0 +1,13 @@
+{
+  "port": "COM33",
+  "baud": 115200,
+  "compiler": "C:/Program Files (x86)/PICC/CCSCON.exe",
+  "ccs_root": "C:/Program Files (x86)/PICC",
+  "active_profile": "station-hw-test",
+  "profiles": {
+    "station-hw-test": {
+      "source": "main.c",
+      "description": "Prueba fisica EEPROM + ADS1115 AIN0/AIN1 + RTC, consola descriptiva"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "port": "COM33",
+  "baud": 115200,
+  "compiler": "C:/Program Files (x86)/PICC/CCSCON.exe",
+  "ccs_root": "C:/Program Files (x86)/PICC",
+  "active_profile": "station-rtc-sd",
+  "profiles": {
+    "station-rtc-sd": {
+      "source": "main.c",
+      "description": "Demo MCP79402 I2C1 + microSD SPI2 + FAT32 y CSV"
+    }
+  }
+}
