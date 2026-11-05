@@ -7,10 +7,6 @@
     {
       "name": "Protolink common",
       "path": "../../common"
-    },
-    {
-      "name": "Galio sd-card",
-      "path": "galio/sd-card"
     }
   ],
   "tasks": {
