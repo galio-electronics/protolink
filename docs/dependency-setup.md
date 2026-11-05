@@ -38,6 +38,14 @@ compilación y conserva los archivos. Las descargas fallidas quedan en carpetas
 temporales para diagnóstico. Para cambiar versiones, conservar o mover el checkout
 anterior antes de volver a preparar las dependencias.
 
+Si Windows bloquea el renombrado de una descarga verificada (errores 5, 32 o 33),
+el gestor reintenta hasta ocho veces, durante unos diez segundos. Si el bloqueo
+persiste, conserva la carpeta `.nombre-download-*` y muestra su ruta. Cerrar
+los procesos que la esten usando y repetir el mismo comando `deps-sync`.
+El gestor vuelve a comprobar origin, commit, limpieza y huellas de las descargas
+anteriores; reutiliza una que coincida sin volver a descargar. Carpetas incompletas,
+modificadas o de otra version quedan intactas y no se instalan.
+
 Los repositorios privados usan Git Credential Manager: autenticar Git previamente;
 no guardar tokens en URLs ni archivos versionados. Un checkout ya verificado se
 reutiliza sin conexión. Las antiguas descargas del `galio/` raíz quedan intactas,

@@ -130,3 +130,93 @@ class DependenciesTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, 'descarga incompleta'):
                 deps.ensure(self.root, 'demo')
         self.assertFalse((self.root/'galio/driver').exists())
+
+    def windows_lock(self, code=32):
+        error = PermissionError('Directory is in use')
+        error.winerror = code
+        return error
+
+    def test_windows_lock_retries_without_cloning_again(self):
+        real_rename = Path.rename
+        failures = [self.windows_lock(32), self.windows_lock(5), self.windows_lock(33)]
+
+        def rename(source, target):
+            if failures:
+                raise failures.pop(0)
+            return real_rename(source, target)
+
+        with patch.object(Path, 'rename', autospec=True, side_effect=rename) as move, \
+             patch('dependencies.time.sleep') as sleep:
+            deps.ensure(self.root, 'demo')
+        self.assertEqual(move.call_count, 4)
+        self.assertEqual(sleep.call_count, 3)
+        self.assertEqual(sum(c[0] == 'clone' for c in self.calls), 1)
+        self.assertEqual(deps.status(self.root, 'demo'), {'driver': []})
+
+    def leave_locked_download(self):
+        with patch.object(Path, 'rename', side_effect=self.windows_lock()) as move, \
+             patch('dependencies.time.sleep') as sleep:
+            with self.assertRaisesRegex(RuntimeError, 'Windows mantiene bloqueada'):
+                deps.ensure(self.root, 'demo')
+        self.assertEqual(move.call_count, 8)
+        self.assertEqual(sleep.call_count, 7)
+        self.assertFalse((self.root/'galio/driver').exists())
+        staging, = (self.root/'galio').glob('.driver-download-*')
+        self.assertEqual(deps.inspect(staging, self.entry), [])
+        return staging
+
+    def test_persistent_lock_keeps_verified_download_for_offline_retry(self):
+        staging = self.leave_locked_download()
+        self.calls.clear()
+        deps.ensure(self.root, 'demo')
+        self.assertFalse(staging.exists())
+        self.assertEqual(deps.status(self.root, 'demo'), {'driver': []})
+        self.assertFalse(any(c[0] in ('clone', 'fetch', 'checkout', 'pull') for c in self.calls))
+
+    def test_recovery_preserves_modified_staging(self):
+        staging = self.leave_locked_download()
+        (staging/'notes.txt').write_text('keep my notes')
+        self.calls.clear()
+        deps.ensure(self.root, 'demo')
+        self.assertEqual((staging/'notes.txt').read_text(), 'keep my notes')
+        self.assertEqual(sum(c[0] == 'clone' for c in self.calls), 1)
+        self.assertEqual(deps.status(self.root, 'demo'), {'driver': []})
+
+    def test_recovery_rechecks_manifest_hashes(self):
+        staging = self.leave_locked_download()
+        self.entry['sha256']['driver.h'] = '0'*64
+        self.save()
+        with self.assertRaisesRegex(RuntimeError, 'huella distinta'):
+            deps.ensure(self.root, 'demo')
+        self.assertTrue(staging.is_dir())
+        self.assertFalse((self.root/'galio/driver').exists())
+
+    def test_incomplete_staging_is_preserved(self):
+        staging = self.root/'galio/.driver-download-incomplete'
+        staging.mkdir(parents=True)
+        (staging/'notes.txt').write_text('keep')
+        deps.ensure(self.root, 'demo')
+        self.assertEqual((staging/'notes.txt').read_text(), 'keep')
+        self.assertEqual(deps.status(self.root, 'demo'), {'driver': []})
+
+    def test_unrelated_rename_error_is_not_retried(self):
+        with patch.object(Path, 'rename', side_effect=OSError('disk full')) as move, \
+             patch('dependencies.time.sleep') as sleep:
+            with self.assertRaisesRegex(RuntimeError, 'disk full'):
+                deps.ensure(self.root, 'demo')
+        move.assert_called_once()
+        sleep.assert_not_called()
+
+    def test_destination_appearing_during_retry_is_not_replaced(self):
+        target = self.root/'galio/driver'
+
+        def competing_process(_delay):
+            target.mkdir()
+            (target/'keep.txt').write_text('other process')
+
+        with patch.object(Path, 'rename', side_effect=self.windows_lock()) as move, \
+             patch('dependencies.time.sleep', side_effect=competing_process):
+            with self.assertRaisesRegex(RuntimeError, 'Otra ejecucion'):
+                deps.ensure(self.root, 'demo')
+        move.assert_called_once()
+        self.assertEqual((target/'keep.txt').read_text(), 'other process')

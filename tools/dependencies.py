@@ -10,6 +10,7 @@ from pathlib import Path
 import re
 import subprocess
 import tempfile
+import time
 
 
 def manifest(root):
@@ -99,6 +100,44 @@ def status(root, profile, all_libraries=False):
             for name in selected(data, profile, all_libraries)}
 
 
+def prepared_download(path, entry):
+    """Reuse only a complete, clean checkout for this exact manifest entry."""
+    for candidate in sorted(path.parent.glob(f'.{path.name}-download-*')):
+        if not candidate.is_dir() or candidate.resolve() != candidate:
+            continue
+        try:
+            if not inspect(candidate, entry):
+                return candidate
+        except (OSError, RuntimeError):
+            # Incomplete clones and inaccessible directories remain untouched.
+            continue
+    return None
+
+
+def install_prepared(staging, path):
+    """Windows scanners may hold a freshly verified Git directory briefly."""
+    delays = (0.25, 0.5, 1, 2, 2, 2, 2)
+    for attempt in range(len(delays) + 1):
+        if path.exists():
+            raise RuntimeError('Otra ejecucion creo el destino; reintentar')
+        try:
+            staging.rename(path)
+            return
+        except OSError as exc:
+            # Do not retry disk-full, missing-source or unrelated filesystem errors.
+            if getattr(exc, 'winerror', None) not in (5, 32, 33):
+                raise
+            if attempt == len(delays):
+                raise RuntimeError(
+                    f'Windows mantiene bloqueada la carpeta verificada {staging}. '
+                    'Cerrar procesos que la esten usando y repetir deps-sync; '
+                    'se reutilizara si sigue coincidiendo con el manifiesto. '
+                    'No se borro ni reemplazo ningun repositorio.') from exc
+            if attempt == 0:
+                print('DEPENDENCIA: Windows bloqueo el renombrado; reintentando...', flush=True)
+            time.sleep(delays[attempt])
+
+
 def ensure(root, profile, all_libraries=False):
     data = manifest(root)
     names = selected(data, profile, all_libraries)
@@ -107,22 +146,27 @@ def ensure(root, profile, all_libraries=False):
         path = destination(root, name)
         if not path.exists():
             path.parent.mkdir(parents=True, exist_ok=True)
-            print(f"DEPENDENCIA {name}: descargando {entry['url']} @ {entry['commit'][:12]}", flush=True)
-            # Keep failed clones for diagnosis; never recursively delete user data.
-            staging = Path(tempfile.mkdtemp(prefix=f'.{name}-download-', dir=path.parent))
+            staging = prepared_download(path, entry)
+            if staging is None:
+                print(f"DEPENDENCIA {name}: descargando {entry['url']} @ {entry['commit'][:12]}", flush=True)
+                # Keep failed clones for diagnosis; never recursively delete user data.
+                staging = Path(tempfile.mkdtemp(prefix=f'.{name}-download-', dir=path.parent))
+                try:
+                    # CCS 5.081 misparses some #if expressions in LF-only headers.
+                    # Git tracks normalized LF; Windows compiler receives CRLF.
+                    git('clone', '--no-checkout', '--config', 'core.autocrlf=true', entry['url'], str(staging))
+                    git('checkout', '--detach', entry['commit'], cwd=staging)
+                    issues = inspect(staging, entry)
+                    if issues:
+                        raise RuntimeError('; '.join(issues))
+                except Exception as exc:
+                    raise RuntimeError(f'{name}: descarga incompleta en {staging}; {exc}') from exc
+            else:
+                print(f'DEPENDENCIA {name}: reutilizando descarga verificada {staging.name}', flush=True)
             try:
-                # CCS 5.081 misparses some #if expressions in LF-only headers.
-                # Git tracks normalized LF; Windows compiler receives CRLF.
-                git('clone', '--no-checkout', '--config', 'core.autocrlf=true', entry['url'], str(staging))
-                git('checkout', '--detach', entry['commit'], cwd=staging)
-                issues = inspect(staging, entry)
-                if issues:
-                    raise RuntimeError('; '.join(issues))
-                if path.exists():
-                    raise RuntimeError('Otra ejecucion creo el destino; reintentar')
-                staging.rename(path)
+                install_prepared(staging, path)
             except Exception as exc:
-                raise RuntimeError(f'{name}: descarga incompleta en {staging}; {exc}') from exc
+                raise RuntimeError(f'{name}: no se pudo instalar la descarga verificada en {staging}; {exc}') from exc
         issues = inspect(path, entry)
         if issues:
             raise RuntimeError(f"{name}: {'; '.join(issues)}. No se modifico el repositorio existente.")
