@@ -7,10 +7,6 @@
     {
       "name": "Protolink common",
       "path": "../../common"
-    },
-    {
-      "name": "Galio lcd_i2c",
-      "path": "galio/lcd_i2c"
     }
   ],
   "tasks": {

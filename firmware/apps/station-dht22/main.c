@@ -11,7 +11,7 @@
 #define LCD_I2C_START() i2c_start(LCD_BUS)
 #define LCD_I2C_WRITE(value) i2c_write(LCD_BUS,value)
 #define LCD_I2C_STOP() i2c_stop(LCD_BUS)
-#include "../../common/library_config.h"
+#include "../galio/lcd_i2c/lcd_i2c.c"
 #include "../../common/dht22.c"
 #include "ethernet_json.c"
 
