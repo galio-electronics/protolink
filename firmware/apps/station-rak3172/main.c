@@ -11,6 +11,7 @@
 #include <oled_i2c/oled_ssd1306.h>
 #include <rui3_at/rui3_at.h>
 #include "../../common/dht22.c"
+#include "../../common/buzzer.c"
 
 /* Adapter for the existing driver: reuse UART/ISR/ring and TX, but parse
  * responses cooperatively. Its blocking API discards asynchronous events.
@@ -138,6 +139,7 @@ void demo_line(void)
 
 void app_init(void)
 {
+   buzzer_init();
    output_high(TX_5);
    set_tris_e(0b11111011); // RE2 TX5; RE3 RX5; DI1..4 remain inputs.
    setup_uart(RUI3_AT_BAUD,RUI3_UART);
@@ -154,12 +156,14 @@ void app_init(void)
    demo_display_update();
    printf(diagnostics_putc,"INFO OLED SSD1306 I2C1 0x3C presente=%u\r\n",display_present);
    printf(diagnostics_putc,"LORA UART5 RE2/RE3 115200 US915 channels=0-7\r\n");
+   buzzer_beep(DEMO_STARTUP_BEEP_MS);
 }
 
 void app_task(void)
 {
    unsigned int8 c, budget=32;
    int1 available;
+   buzzer_task();
    dht22_task();
    while(budget--)
    {
@@ -222,6 +226,9 @@ void app_task_100ms(void)
       if((unsigned int32)(now-command_ms)>3000)
       {
          event_health_lora(FALSE,1);
+         // No AT response: module communication failure, not a JOIN failure.
+         // Also warn when absent at boot; repeat on each failed retry.
+         buzzer_beep(DEMO_LORA_FAULT_BEEP_MS);
          pending=FALSE; join_wait=FALSE; tx_wait=FALSE;
          response_len=0; overflow=FALSE;
          next_ms=now+DEMO_INTERVAL_MS;

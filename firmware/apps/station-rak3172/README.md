@@ -7,6 +7,29 @@ Cerrar cualquier otro monitor antes de cargar.
 
 ## Hardware y red
 
+Desde firmware 0.2.4, el buzzer activo conectado a BUZZ_OUT (RA5) emite
+un pitido de 150 ms al terminar la inicializacion de la app. Se configura
+RA5 como salida y se apaga desde la tarea cooperativa, sin esperas bloqueantes
+ni PWM. `DEMO_STARTUP_BEEP_MS` ajusta la duracion; `BUZZER_ACTIVE_LEVEL`
+vale 1 (activacion en alto). Si el circuito de la placa invierte la senal,
+configurar ese nivel en 0. La prueba audible requiere cargar el firmware.
+
+En 0.2.5 se utiliza el modulo reutilizable `firmware/common/buzzer.c`.
+Un comando AT sin respuesta durante mas de 3 segundos genera un pitido de
+500 ms (`DEMO_LORA_FAULT_BEEP_MS`), incluso si el modulo no responde al
+arrancar. Se repite en cada reintento fallido (60 s de espera entre intentos).
+JOIN_FAILED y EVENT_TIMEOUT no disparan el buzzer: no prueban perdida de UART.
+La deteccion depende del siguiente comando; no hay sondeo continuo durante
+el intervalo de 60 segundos entre uplinks.
+
+Validacion 0.2.5 (2026-11-05): CCS 5.081 sin errores, advertencia preexistente
+`ctx` en RUI3, HEX validado y carga aceptada en COM26. Arranque 0.2.5,
+RAK_DETECTADO, JOINED, TX_DONE y DHT22 confirmados; OLED reporto presente=0.
+Las 36 pruebas de herramientas pasaron. Log local:
+`logs/20261105-220337-322410-station-rak3172.log`.
+Pendiente comprobar sonido y desconexion fisica del modulo para validar
+el aviso audible; la sesion de prueba mantuvo comunicacion con el RAK.
+
 - PIC18F67K40, CCS 5.081, bootloader conservado hasta 0x05FF.
 - Socket confirmado por el usuario: UART5, RE2 TX / RE3 RX, 115200 8N1.
 - UART1 sigue siendo consola. Timer2 conserva el scheduler y DO1..8 inactivas.
