@@ -12,6 +12,7 @@
 #include <rui3_at/rui3_at.h>
 #include "../../common/dht22.c"
 #include "../../common/buzzer.c"
+#include "../../common/station_adc.c"
 
 /* Adapter for the existing driver: reuse UART/ISR/ring and TX, but parse
  * responses cooperatively. Its blocking API discards asynchronous events.
@@ -140,6 +141,7 @@ void demo_line(void)
 void app_init(void)
 {
    buzzer_init();
+   station_adc_init();
    output_high(TX_5);
    set_tris_e(0b11111011); // RE2 TX5; RE3 RX5; DI1..4 remain inputs.
    setup_uart(RUI3_AT_BAUD,RUI3_UART);
@@ -164,6 +166,7 @@ void app_task(void)
    unsigned int8 c, budget=32;
    int1 available;
    buzzer_task();
+   station_adc_task();
    dht22_task();
    while(budget--)
    {
@@ -296,5 +299,18 @@ void app_task_100ms(void)
          break;
    }
 }
-void app_task_1000ms(void) { }
+void app_task_1000ms(void)
+{
+   if(dht22_busy()) return;
+   if(station_adc_ready())
+   {
+      printf(diagnostics_putc,"VIN raw=%LU mv=%LU saturated=%u\r\n",
+         (unsigned int32)station_adc_raw(STATION_ADC_VIN),
+         station_adc_millivolts(STATION_ADC_VIN),station_adc_saturated(STATION_ADC_VIN));
+      printf(diagnostics_putc,"AUX raw=%LU mv=%LU saturated=%u\r\n",
+         (unsigned int32)station_adc_raw(STATION_ADC_AUX),
+         station_adc_millivolts(STATION_ADC_AUX),station_adc_saturated(STATION_ADC_AUX));
+   }
+   station_adc_start();
+}
 #include "../../common/station_app.c"

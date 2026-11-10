@@ -35,6 +35,38 @@ main, nunca desde ISR. El apagado tiene la latencia del bucle principal y
 el calculo de tiempo tolera el desbordamiento del contador de milisegundos.
 No usa PWM ni reserva otro timer; corresponde a buzzers activos.
 
+### ADC compartido: VIN y AUX
+
+`firmware/common/station_adc.h` y `station_adc.c` controlan el ADC de 10 bits
+del PIC18F67K40 a 64 MHz. Habilitan AUX_ADC (RA0/AN0) y VIN_ADC (RA1/AN1),
+con referencia VSS/VDD; los demas pines quedan digitales. No combinar con
+otros drivers ADC. Sustituye al modulo provisional `vin_adc`.
+
+Configurar `STATION_ADC_VREF_MV` con VDD medido (3300 mV nominales).
+`STATION_ADC_VIN_R1_KOHM`/`STATION_ADC_VIN_R2_KOHM` valen 100/10;
+`STATION_ADC_AUX_R1_KOHM`/`STATION_ADC_AUX_R2_KOHM` valen 10/10.
+R1 conecta la entrada con el pin ADC y R2 conecta el pin con GND.
+VIN usa `round(raw * 36300 / 1023)` y AUX `round(raw * 6600 / 1023)`.
+AUX devuelve el voltaje original del sensor de 0-5 V, no el voltaje dividido.
+5 V producen aproximadamente 775 cuentas. La precision depende de VDD y
+las tolerancias de las resistencias. Los pines deben permanecer entre VSS
+y VDD; el fondo de escala calculado no es el limite de alimentacion de la placa.
+
+Incluir `station_adc.c` una vez despues del encabezado de placa. Llamar
+`station_adc_init()` en app_init, `station_adc_start()` para solicitar el par
+y `station_adc_task()` desde app_task (`APP_FAST_TASK=1`). Requiere Timer2
+inicializado y llamadas desde main, nunca ISR. El modulo adquiere AUX y luego
+VIN; espera dos ticks despues de cada cambio de canal sin bloquear y consulta
+`adc_done()` antes de leer. start devuelve FALSE si hay una secuencia pendiente.
+
+`station_adc_ready()` solo es verdadero cuando ambas lecturas estan completas;
+se invalida al aceptar una nueva solicitud. Consultar entonces
+`station_adc_raw(canal)`, `station_adc_millivolts(canal)` y
+`station_adc_saturated(canal)`, usando `STATION_ADC_VIN` o `STATION_ADC_AUX`.
+Las lecturas son secuenciales, no simultaneas. Saturacion significa 1023 cuentas;
+no identifica un sensor desconectado ni una senal AUX que supera 5 V pero sigue
+dentro del rango del ADC. Canales invalidos devuelven cero/FALSE.
+
 ### Herramientas de compilacion
 
 Abrir el workspace de la app. Las tareas pasan su `--config` a `tools/run.ps1`.

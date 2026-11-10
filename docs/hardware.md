@@ -3,7 +3,8 @@
 PIC18F67K40, cristal 16 MHz con PLL a 64 MHz. Mapa único en `station.h`.
 DO1–DO8 inactivas en alto (confirmación del usuario); LEDs activos en alto.
 Los LAT se precargan con pines como entradas antes de habilitar DO/LED mediante TRIS.
-ADC deshabilitado en esta etapa; entradas digitales crudas. Controles de módulos
+ADC deshabilitado en la inicializacion base; cada app habilita los canales que
+utiliza (station-rak3172 0.2.7 habilita VIN en RA1/AN1 y AUX en RA0/AN0). Entradas digitales crudas. Controles de módulos
 sin activar: su nivel durante reset depende de la polarización de hardware.
 
 BOOT RA4 activo bajo, leído al arrancar. UART1 RC6/RC7 y CP210x COM26.

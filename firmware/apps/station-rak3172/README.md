@@ -101,6 +101,37 @@ no se actualiza automaticamente ni se utiliza para programar la identidad.
 
 ## Payload y consola
 
+### VIN y AUX (firmware 0.2.7)
+
+El modulo comun `station_adc.c` coordina ambos canales con ADC de 10 bits
+y referencia VDD de 3300 mV (`STATION_ADC_VREF_MV`, ajustar con multimetro):
+
+- VIN_ADC, RA1/AN1: R1=100 kohm y R2=10 kohm; factor 11.
+- AUX_ADC, RA0/AN0: R1=10 kohm y R2=10 kohm; factor 2, para sensores de 0-5 V.
+
+R1 conecta la senal al pin ADC; R2 conecta el pin a GND. El voltaje reportado
+corresponde a la entrada antes del divisor. No se convierte a unidades del sensor.
+VIN representa la alimentacion protegida despues del diodo RB050LAM-60TF,
+sin compensar su caida. El usuario confirmo la conversion de VIN y midio
+15.08 V en la fuente y 14.67 V despues del diodo; se conserva esta ultima
+referencia como voltaje de alimentacion del sistema.
+La app solicita un par aproximadamente cada segundo y publica el resultado
+anterior (puede posponerlo durante DHT22). Ejemplos de consola:
+
+```text
+VIN raw=338 mv=11994 saturated=0
+AUX raw=775 mv=5000 saturated=0
+```
+
+Las primeras lineas aparecen aproximadamente a los dos segundos. `saturated=1`
+indica fondo de escala del ADC, no un voltaje fiable fuera de rango. AUX mayor
+que 5000 mV queda visible como tal; no se recorta a 5 V. Las lecturas no se
+agregan al payload LoRaWAN ni a la OLED.
+
+Validacion 0.2.7: CCS 5.081 sin errores, advertencia preexistente `ctx` en RUI3,
+HEX validado. VIN confirmado por el usuario; pendiente validacion de AUX
+con multimetro. Compilacion y HEX revalidados el 2026-11-10.
+
 ### OLED (firmware 0.2.3)
 
 OLED SSD1306 de 128x64, direccion I2C de 7 bits `0x3C`, conectada a
